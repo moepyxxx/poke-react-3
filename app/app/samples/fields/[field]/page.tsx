@@ -14,9 +14,9 @@ import {
   SAMPLE_FIELD_MAP,
   TALK_MAPS,
 } from "./sample";
-import { useGetFieldBase } from "@/app/hooks/useGetFieldBase";
-import { useGetFieldObject } from "@/app/hooks/useGetFieldObject";
-import { useGetBoyDirection } from "@/app/hooks/useGetBoyDirection";
+import { useGetFieldBase } from "@/hooks/useGetFieldBase";
+import { useGetFieldObject } from "@/hooks/useGetFieldObject";
+import { useGetBoyDirection } from "@/hooks/useGetBoyDirection";
 import { GameScreenView } from "@/components/GameScreenView";
 
 export default function SampleFieldPage({

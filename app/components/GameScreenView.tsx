@@ -7,9 +7,9 @@ import {
 } from "@/types";
 import { FC } from "react";
 import { motion } from "framer-motion";
-import { useGetFieldBase } from "@/app/hooks/useGetFieldBase";
-import { useGetFieldObject } from "@/app/hooks/useGetFieldObject";
-import { useGetBoyDirection } from "@/app/hooks/useGetBoyDirection";
+import { useGetFieldBase } from "@/hooks/useGetFieldBase";
+import { useGetFieldObject } from "@/hooks/useGetFieldObject";
+import { useGetBoyDirection } from "@/hooks/useGetBoyDirection";
 
 type Props = {
   fieldSize: number;

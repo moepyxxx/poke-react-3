@@ -58,7 +58,7 @@ export default function SampleFieldPage({
           currentFieldPosition={currentFieldPosition}
           currentFieldDirection={currentFieldDirection}
         />
-        <div className="pl-5">
+        <div className="pl-12">
           <h1>field: {params.field}</h1>
           <h2>current</h2>
           <p>mode: {currentMode}</p>

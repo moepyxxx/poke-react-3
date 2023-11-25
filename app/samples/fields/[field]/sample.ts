@@ -28,7 +28,14 @@ export const SAMPLE_FIELD_OBJECTS: Record<
   "2-3": { base: "grass" },
   "3-3": {
     base: "grass-load",
-    objects: [{ type: "person", personType: "hakase", direction: "below" }],
+    objects: [
+      {
+        type: "person",
+        personType: "hakase",
+        talkLabel: "sample_talk_selection",
+        direction: "below",
+      },
+    ],
   },
   "4-3": {
     base: "grass",
@@ -53,81 +60,6 @@ export const SAMPLE_FIELD_OBJECTS: Record<
   "3-5": { base: "black" },
   "4-5": { base: "black" },
   "5-5": { base: "black" },
-};
-
-// TODO: 不要かも。削除する
-export const SAMPLE_FIELD_MAP: FieldMaps = {
-  "2-2": {
-    right: {
-      mode: "walk",
-    },
-    below: {
-      mode: "walk",
-    },
-  },
-  "3-2": {
-    right: {
-      mode: "walk",
-    },
-    left: {
-      mode: "walk",
-    },
-    below: {
-      mode: "talk",
-      talkLabel: "sample_talk_selection",
-    },
-  },
-  "4-2": {
-    left: {
-      mode: "walk",
-    },
-    below: {
-      mode: "walk",
-    },
-    right: {
-      mode: "talk",
-      talkLabel: "sample_talk_talk_only",
-    },
-  },
-  "2-3": {
-    right: {
-      mode: "talk",
-      talkLabel: "sample_talk_selection",
-    },
-    above: {
-      mode: "walk",
-    },
-    below: {
-      mode: "walk",
-    },
-  },
-  "3-3": {},
-  "4-3": {
-    left: {
-      mode: "talk",
-      talkLabel: "sample_talk_selection",
-    },
-    above: {
-      mode: "walk",
-    },
-  },
-  "2-4": {
-    right: {
-      mode: "walk",
-    },
-    above: {
-      mode: "walk",
-    },
-  },
-  "3-4": {
-    left: {
-      mode: "walk",
-    },
-    above: {
-      mode: "talk",
-      talkLabel: "sample_talk_selection",
-    },
-  },
 };
 
 export const TALK_MAPS: FieldTalks = {

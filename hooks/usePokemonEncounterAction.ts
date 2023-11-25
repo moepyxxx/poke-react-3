@@ -10,20 +10,26 @@ import { positionToShortPosition } from "@/utils";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
+import { ActionHistory } from "./useActionHistories";
+import { useWatch } from "./useWatch";
 
 export type Options = {
-  currentAction: ControllerAction | null;
+  latestAction: ActionHistory | null;
   fieldObjectMaps: FieldObjectMaps;
   fieldMode: FieldMode;
-  currentFieldPosition: FieldPosition;
-  currentDirection: FieldDirection;
+  fieldPosition: FieldPosition;
+  fieldDirection: FieldDirection;
 };
-export const UsePokemonEncounterAction = ({
-  currentAction,
+
+/**
+ * ポケモンとの遭遇を制御する
+ */
+export const usePokemonEncounterAction = ({
+  latestAction,
   fieldObjectMaps,
   fieldMode,
-  currentFieldPosition,
-  currentDirection,
+  fieldPosition,
+  fieldDirection,
 }: Options) => {
   const [, saveStateCurrentLocation] = useAtom(currentLocationAtom);
   const router = useRouter();
@@ -36,23 +42,23 @@ export const UsePokemonEncounterAction = ({
       return false;
     }
     return (
-      currentAction === "onPushBelow" ||
-      currentAction === "onPushAbove" ||
-      currentAction === "onPushRight" ||
-      currentAction === "onPushLeft"
+      latestAction?.action === "onPushBelow" ||
+      latestAction?.action === "onPushAbove" ||
+      latestAction?.action === "onPushRight" ||
+      latestAction?.action === "onPushLeft"
     );
-  }, [fieldMode, currentAction]);
+  }, [fieldMode, latestAction]);
 
   /**
    * 草むらかどうか判定
    */
   const isObjectGrass = useCallback(() => {
     return fieldObjectMaps[
-      positionToShortPosition(currentFieldPosition)
+      positionToShortPosition(fieldPosition)
     ].objects?.some(
       (object) => object.type === "ornament" && object.ornamentType === "grass"
     );
-  }, [fieldObjectMaps, currentFieldPosition]);
+  }, [fieldObjectMaps, fieldPosition]);
 
   const canEncounter = useMemo(() => {
     if (!isActionWork()) {
@@ -68,29 +74,25 @@ export const UsePokemonEncounterAction = ({
    * 野生ポケモンとの遭遇確率による判定
    */
   const calculateIsEncounter = useCallback(() => {
-    return Math.random() < 0.5;
+    return Math.random() < 0.1;
   }, []);
 
   const onEncounter = useCallback(() => {
     saveStateCurrentLocation({
       field: "sample",
-      position: currentFieldPosition,
-      direction: currentDirection,
+      position: fieldPosition,
+      direction: fieldDirection,
     });
     // バトル画面へ遷移
     router.push("/samples/battle");
-  }, [
-    saveStateCurrentLocation,
-    currentFieldPosition,
-    currentDirection,
-    router,
-  ]);
+  }, [saveStateCurrentLocation, fieldPosition, fieldDirection, router]);
 
-  useEffect(() => {
+  useWatch(latestAction, () => {
+    console.log(latestAction, "hoge!!!!");
     if (!canEncounter || !calculateIsEncounter()) {
       return;
     }
     // 判定条件を満たした場合ポケモンと遭遇する
     onEncounter();
-  }, [canEncounter, calculateIsEncounter, onEncounter]);
+  });
 };

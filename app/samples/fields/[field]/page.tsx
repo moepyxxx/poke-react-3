@@ -3,49 +3,78 @@
 import { GameControllerView } from "@/components/GameControllerView";
 import { useGameController } from "@/hooks/useGameController";
 import {
-  ACTION_MAPS,
   FIELD_ALL_TILE_COUNT,
   FIELD_MIDDLE_POSITION,
   FIELD_SIZE,
   FIELD_VISIBLE_TILE_COUNT,
   SAMPLE_FIELD_OBJECTS,
-  SAMPLE_FIELD_MAP,
   TALK_MAPS,
 } from "./sample";
 import { GameScreenView } from "@/components/GameScreenView";
-import { UsePokemonEncounterAction } from "@/hooks/usePokemonEncounterAction";
+import { usePokemonEncounterAction } from "@/hooks/usePokemonEncounterAction";
+import { useState } from "react";
+import { FieldDirection, FieldMode, FieldPosition } from "@/types";
+import { useTalkAction } from "@/hooks/useTalkAction";
+import { useControllerActionHistories } from "@/hooks/useActionHistories";
+import { useWalkAction } from "@/hooks/useWalkAction";
 
 export default function SampleFieldPage({
   params,
 }: {
   params: { field: string };
 }) {
-  const {
-    controllerOptions,
-    currentFieldDirection,
-    currentFieldPosition,
-    currentMode,
-    currentTalk,
-    currentAction,
-    currentSelection,
-    currentSelectionLabel,
-  } = useGameController({
-    fieldMaps: SAMPLE_FIELD_MAP,
-    talkMaps: TALK_MAPS,
-    actionMaps: ACTION_MAPS,
-    initialFieldDirection: "right",
-    initialFieldPosition: {
-      x: 1 + FIELD_MIDDLE_POSITION,
-      y: 1 + FIELD_MIDDLE_POSITION,
-    },
+  const [fieldMode, setFieldMode] = useState<FieldMode>("walk");
+  const [fieldDirection, setFieldDirection] = useState<FieldDirection>("right");
+  const [fieldPosition, setFieldPosition] = useState<FieldPosition>({
+    x: 1 + FIELD_MIDDLE_POSITION,
+    y: 1 + FIELD_MIDDLE_POSITION,
   });
 
-  UsePokemonEncounterAction({
-    currentAction,
+  const onChangeFieldMode = (mode: FieldMode) => {
+    setFieldMode(mode);
+  };
+
+  const onChangeFieldDirection = (direction: FieldDirection) => {
+    setFieldDirection(direction);
+  };
+
+  const onChangeFieldPosition = (position: FieldPosition) => {
+    setFieldPosition(position);
+  };
+
+  const { latestAction, onControllerAct } = useControllerActionHistories();
+
+  const { controllerOptions } = useGameController({
+    onControllerAct,
+  });
+
+  const { currentSelectionLabel, currentTalk, currentSelection } =
+    useTalkAction({
+      fieldMode,
+      latestAction,
+      fieldObjectMaps: SAMPLE_FIELD_OBJECTS,
+      talkMaps: TALK_MAPS,
+      fieldDirection,
+      fieldPosition,
+      onChangeFieldMode,
+    });
+
+  useWalkAction({
+    fieldMode,
+    latestAction,
+    fieldPosition,
+    fieldDirection,
     fieldObjectMaps: SAMPLE_FIELD_OBJECTS,
-    fieldMode: currentMode,
-    currentFieldPosition,
-    currentDirection: currentFieldDirection,
+    onChangeFieldDirection,
+    onChangeFieldPosition,
+  });
+
+  usePokemonEncounterAction({
+    latestAction,
+    fieldObjectMaps: SAMPLE_FIELD_OBJECTS,
+    fieldMode,
+    fieldPosition,
+    fieldDirection,
   });
 
   return (
@@ -56,17 +85,16 @@ export default function SampleFieldPage({
           fieldAllTileCount={FIELD_ALL_TILE_COUNT}
           fieldVisibleTileCount={FIELD_VISIBLE_TILE_COUNT}
           fieldObjects={SAMPLE_FIELD_OBJECTS}
-          currentFieldPosition={currentFieldPosition}
-          currentFieldDirection={currentFieldDirection}
+          currentFieldPosition={fieldPosition}
+          currentFieldDirection={fieldDirection}
         />
         <div className="pl-12">
           <h1>field: {params.field}</h1>
           <h2>current</h2>
-          <p>mode: {currentMode}</p>
-          <p>direction: {currentFieldDirection}</p>
+          <p>mode: {fieldMode}</p>
+          <p>direction: {fieldDirection}</p>
           <p>
-            positionX: {currentFieldPosition.x}, positionY:{" "}
-            {currentFieldPosition.y}
+            positionX: {fieldPosition.x}, positionY: {fieldPosition.y}
           </p>
           <h2>talk content</h2>
           {currentTalk && <p>「{currentTalk?.talk}」</p>}

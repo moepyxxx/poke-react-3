@@ -25,6 +25,7 @@ export type FieldObjectPerson = {
   type: "person";
   personType: FieldPersonType;
   direction: FieldDirection;
+  talkLabel: string;
 };
 export type FieldObject = FieldObjectOrnament | FieldObjectPerson;
 export type FieldTalkSelect = {

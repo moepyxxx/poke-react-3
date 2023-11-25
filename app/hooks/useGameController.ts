@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ControllerAction,
   FieldAction,
   FieldDirection,
   FieldMaps,
@@ -11,7 +12,6 @@ import {
   FieldTalks,
 } from "@/types";
 import { positionToShortPosition } from "@/utils";
-import { on } from "events";
 import { useCallback, useState } from "react";
 
 export type UseGameControllerOptions = {
@@ -21,6 +21,7 @@ export type UseGameControllerOptions = {
   talkMaps: FieldTalks;
   actionMaps: Record<string, FieldAction>;
 };
+// Refactor: controllerは純粋なコントロール作業だけを制御する。talkやworkの制御は別のcontrollerが制御する
 export const useGameController = ({
   fieldMaps,
   initialFieldDirection,
@@ -41,8 +42,12 @@ export const useGameController = ({
   const [currentSelection, setCurrentSelection] = useState<FieldTalkSelect[]>(
     []
   );
+  const [currentAction, setCurrentAction] = useState<ControllerAction | null>(
+    null
+  );
 
   const onPushA = useCallback(() => {
+    setCurrentAction("onPushA");
     // 会話モードの場合
     if (currentMode === "select" && currentTalkLabel != null) {
       if (currentSelectionLabel == null) {
@@ -125,11 +130,13 @@ export const useGameController = ({
 
   // TODO
   const onPushB = useCallback(() => {
+    setCurrentAction("onPushB");
     console.log("pushB");
   }, []);
 
   // TODO
   const onPushStart = useCallback(() => {
+    setCurrentAction("onPushStart");
     console.log("pushStart");
   }, []);
 
@@ -195,6 +202,7 @@ export const useGameController = ({
   );
 
   const onPushAbove = useCallback(() => {
+    setCurrentAction("onPushAbove");
     switch (currentMode) {
       case "walk":
         onWalk("above", {
@@ -208,6 +216,7 @@ export const useGameController = ({
   }, [currentFieldPosition, onWalk, currentMode, onSelect]);
 
   const onPushBelow = useCallback(() => {
+    setCurrentAction("onPushBelow");
     switch (currentMode) {
       case "walk":
         onWalk("below", {
@@ -221,6 +230,7 @@ export const useGameController = ({
   }, [currentFieldPosition, onWalk, currentMode, onSelect]);
 
   const onPushLeft = useCallback(() => {
+    setCurrentAction("onPushLeft");
     onWalk("left", {
       ...currentFieldPosition,
       x: currentFieldPosition.x - 1,
@@ -228,6 +238,7 @@ export const useGameController = ({
   }, [currentFieldPosition, onWalk]);
 
   const onPushRight = useCallback(() => {
+    setCurrentAction("onPushRight");
     onWalk("right", {
       ...currentFieldPosition,
       x: currentFieldPosition.x + 1,
@@ -241,6 +252,7 @@ export const useGameController = ({
     currentTalk,
     currentSelectionLabel,
     currentSelection,
+    currentAction,
     controllerOptions: {
       onPushA,
       onPushB,

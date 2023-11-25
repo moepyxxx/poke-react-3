@@ -14,7 +14,7 @@ export type FieldButtonAction =
   | "pushCursorBelow";
 export type FieldMode = "walk" | "talk" | "action" | "select";
 export type FieldBase = "liver" | "black" | "grass" | "grass-load";
-export type FieldOrnamentType = "tree";
+export type FieldOrnamentType = "tree" | "grass";
 export type FieldPersonType = "hakase";
 export type FieldObjectType = "person" | "ornament";
 export type FieldObjectOrnament = {
@@ -52,6 +52,15 @@ export type FieldAction = {
   action: () => void;
 };
 
+export type ControllerAction =
+  | "onPushA"
+  | "onPushB"
+  | "onPushStart"
+  | "onPushAbove"
+  | "onPushBelow"
+  | "onPushLeft"
+  | "onPushRight";
+
 export type FieldWalkMap = {
   mode: "walk";
 };
@@ -68,11 +77,6 @@ export type FieldActionMap = {
 
 export type FieldMap = FieldActionMap | FieldWalkMap | FieldTalkMap;
 
-export type FieldMaps = Record<
-  ShortFieldPosition,
-  Partial<Record<FieldDirection, FieldMap>>
->;
-
 export type ControllerOptions = {
   onPushA: () => void;
   onPushB: () => void;
@@ -88,4 +92,22 @@ export type FieldMaterial = {
   objects?: FieldObject[];
 };
 
-export type FieldBaseMaps = Record<ShortFieldPosition, FieldMaterial>;
+/**
+ * フィールドに対する紐付け
+ */
+
+// フィールドに対するActionマッピング
+// Current情報とFieldObjectMapsを元にすればFieldMapsは不要かも
+export type FieldMaps = Record<
+  ShortFieldPosition,
+  Partial<Record<FieldDirection, FieldMap>>
+>;
+
+// フィールドに対するObjectマッピング
+export type FieldObjectMaps = Record<
+  ShortFieldPosition,
+  {
+    base: FieldBase;
+    objects?: FieldObject[];
+  }
+>;

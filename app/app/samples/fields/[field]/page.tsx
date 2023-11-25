@@ -2,8 +2,6 @@
 
 import { GameControllerView } from "@/components/GameControllerView";
 import { useGameController } from "@/hooks/useGameController";
-import { ShortFieldPosition } from "@/types";
-import { motion } from "framer-motion";
 import {
   ACTION_MAPS,
   FIELD_ALL_TILE_COUNT,
@@ -14,26 +12,21 @@ import {
   SAMPLE_FIELD_MAP,
   TALK_MAPS,
 } from "./sample";
-import { useGetFieldBase } from "@/hooks/useGetFieldBase";
-import { useGetFieldObject } from "@/hooks/useGetFieldObject";
-import { useGetBoyDirection } from "@/hooks/useGetBoyDirection";
 import { GameScreenView } from "@/components/GameScreenView";
+import { UsePokemonEncounterAction } from "@/hooks/usePokemonEncounterAction";
 
 export default function SampleFieldPage({
   params,
 }: {
   params: { field: string };
 }) {
-  const getFieldBase = useGetFieldBase();
-  const getFieldObject = useGetFieldObject();
-  const getBoyDirection = useGetBoyDirection();
-
   const {
     controllerOptions,
     currentFieldDirection,
     currentFieldPosition,
     currentMode,
     currentTalk,
+    currentAction,
     currentSelection,
     currentSelectionLabel,
   } = useGameController({
@@ -45,6 +38,14 @@ export default function SampleFieldPage({
       x: 1 + FIELD_MIDDLE_POSITION,
       y: 1 + FIELD_MIDDLE_POSITION,
     },
+  });
+
+  UsePokemonEncounterAction({
+    currentAction,
+    fieldObjectMaps: SAMPLE_FIELD_OBJECTS,
+    fieldMode: currentMode,
+    currentFieldPosition,
+    currentDirection: currentFieldDirection,
   });
 
   return (

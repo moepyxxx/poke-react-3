@@ -35,8 +35,14 @@ export const SAMPLE_FIELD_OBJECTS: Record<
   },
   "5-3": { base: "black" },
   "1-4": { base: "black" },
-  "2-4": { base: "grass" },
-  "3-4": { base: "grass-load" },
+  "2-4": {
+    base: "grass",
+    objects: [{ type: "ornament", ornamentType: "grass" }],
+  },
+  "3-4": {
+    base: "grass",
+    objects: [{ type: "ornament", ornamentType: "grass" }],
+  },
   "4-4": {
     base: "grass",
     objects: [{ type: "ornament", ornamentType: "tree" }],
@@ -49,6 +55,7 @@ export const SAMPLE_FIELD_OBJECTS: Record<
   "5-5": { base: "black" },
 };
 
+// TODO: 不要かも。削除する
 export const SAMPLE_FIELD_MAP: FieldMaps = {
   "2-2": {
     right: {

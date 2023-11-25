@@ -88,7 +88,6 @@ export const usePokemonEncounterAction = ({
   }, [saveStateCurrentLocation, fieldPosition, fieldDirection, router]);
 
   useWatch(latestAction, () => {
-    console.log(latestAction, "hoge!!!!");
     if (!canEncounter || !calculateIsEncounter()) {
       return;
     }

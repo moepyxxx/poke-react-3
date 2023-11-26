@@ -6,6 +6,7 @@ import {
   useControllerActionHistories,
   useGameController,
 } from "@/features/adventure/hooks";
+import { GameControllerView } from "@/features/adventure/components";
 
 export const BattleView = () => {
   const [stateCurrentLocation] = useAtom(currentLocationAtom);
@@ -24,6 +25,7 @@ export const BattleView = () => {
       <p>
         {stateCurrentLocation?.position.x} : {stateCurrentLocation?.position.y}
       </p>
+      <GameControllerView controllerOptions={controllerOptions} />
     </>
   );
 };

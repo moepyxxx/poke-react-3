@@ -5,7 +5,7 @@ import {
   FieldObject,
   FieldTalks,
   ShortFieldPosition,
-} from "@/app/features/adventure/types";
+} from "@/features/adventure/types";
 
 export const SAMPLE_FIELD_OBJECTS: Record<
   ShortFieldPosition,

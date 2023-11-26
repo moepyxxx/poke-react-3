@@ -7,8 +7,8 @@ import {
   FieldObject,
   FieldObjectMaps,
   FieldPosition,
-} from "@/app/features/adventure/types";
-import { calculateShortPosition } from "@/app/features/adventure/utils";
+} from "@/features/adventure/types";
+import { calculateShortPosition } from "@/features/adventure/utils";
 import { useCallback } from "react";
 import { useWatch } from "./useWatch";
 import { ActionHistory } from "./useActionHistories";

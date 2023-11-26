@@ -1,7 +1,7 @@
 "use client";
 
-import { GameControllerView } from "@/app/features/adventure/components/GameControllerView";
-import { useGameController } from "@/app/features/adventure/hooks/useGameController";
+import { GameControllerView } from "@/features/adventure/components/GameControllerView";
+import { useGameController } from "@/features/adventure/hooks/useGameController";
 import {
   FIELD_ALL_TILE_COUNT,
   FIELD_MIDDLE_POSITION,
@@ -10,17 +10,17 @@ import {
   SAMPLE_FIELD_OBJECTS,
   TALK_MAPS,
 } from "../datas/sample";
-import { GameScreenView } from "@/app/features/adventure/components/GameScreenView";
-import { usePokemonEncounterAction } from "@/app/features/adventure/hooks/usePokemonEncounterAction";
+import { GameScreenView } from "@/features/adventure/components/GameScreenView";
+import { usePokemonEncounterAction } from "@/features/adventure/hooks/usePokemonEncounterAction";
 import { useState } from "react";
 import {
   FieldDirection,
   FieldMode,
   FieldPosition,
-} from "@/app/features/adventure/types";
-import { useTalkAction } from "@/app/features/adventure/hooks/useTalkAction";
-import { useControllerActionHistories } from "@/app/features/adventure/hooks/useActionHistories";
-import { useWalkAction } from "@/app/features/adventure/hooks/useWalkAction";
+} from "@/features/adventure/types";
+import { useTalkAction } from "@/features/adventure/hooks/useTalkAction";
+import { useControllerActionHistories } from "@/features/adventure/hooks/useActionHistories";
+import { useWalkAction } from "@/features/adventure/hooks/useWalkAction";
 
 export const FieldView = ({ field }: { field: string }) => {
   const [fieldMode, setFieldMode] = useState<FieldMode>("walk");

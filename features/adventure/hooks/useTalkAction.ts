@@ -9,11 +9,11 @@ import {
   FieldTalk,
   FieldTalkSelect,
   FieldTalks,
-} from "@/app/features/adventure/types";
+} from "@/features/adventure/types";
 import {
   calculateShortPosition,
   positionToShortPosition,
-} from "@/app/features/adventure/utils";
+} from "@/features/adventure/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useWatch } from "./useWatch";
 import { ActionHistory } from "./useActionHistories";

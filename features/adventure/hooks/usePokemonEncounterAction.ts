@@ -5,8 +5,8 @@ import {
   FieldMode,
   FieldObjectMaps,
   FieldPosition,
-} from "@/app/features/adventure/types";
-import { positionToShortPosition } from "@/app/features/adventure/utils";
+} from "@/features/adventure/types";
+import { positionToShortPosition } from "@/features/adventure/utils";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";

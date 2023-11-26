@@ -1,4 +1,4 @@
-import { FieldMaterial } from "@/app/features/adventure/types";
+import { FieldMaterial } from "@/features/adventure/types";
 import Image from "next/image";
 
 export const useGetFieldBase = () => {

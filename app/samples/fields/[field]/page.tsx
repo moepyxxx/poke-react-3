@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldView } from "@/app/features/adventure/views";
+import { FieldView } from "@/features/adventure/views";
 
 export default function SampleFieldPage({
   params,

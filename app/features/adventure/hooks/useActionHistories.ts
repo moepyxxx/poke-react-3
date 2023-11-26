@@ -1,4 +1,4 @@
-import { ControllerAction } from "@/types";
+import { ControllerAction } from "@/app/features/adventure/types";
 import { useState } from "react";
 
 export type ActionHistory = {

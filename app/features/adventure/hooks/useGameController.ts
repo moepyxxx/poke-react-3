@@ -1,6 +1,6 @@
 "use client";
 
-import { ControllerAction } from "@/types";
+import { ControllerAction } from "@/app/features/adventure/types";
 import { useCallback } from "react";
 
 export type UseGameControllerOptions = {

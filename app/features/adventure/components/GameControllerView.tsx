@@ -1,4 +1,4 @@
-import { ControllerOptions } from "@/types";
+import { ControllerOptions } from "@/app/features/adventure/types";
 import { FC } from "react";
 
 export type Props = {

@@ -4,12 +4,12 @@ import {
   FieldObject,
   FieldPosition,
   ShortFieldPosition,
-} from "@/types";
+} from "@/app/features/adventure/types";
 import { FC } from "react";
 import { motion } from "framer-motion";
-import { useGetFieldBase } from "@/hooks/useGetFieldBase";
-import { useGetFieldObject } from "@/hooks/useGetFieldObject";
-import { useGetBoyDirection } from "@/hooks/useGetBoyDirection";
+import { useGetFieldBase } from "@/app/features/adventure/hooks/useGetFieldBase";
+import { useGetFieldObject } from "@/app/features/adventure/hooks/useGetFieldObject";
+import { useGetBoyDirection } from "@/app/features/adventure/hooks/useGetBoyDirection";
 
 type Props = {
   fieldSize: number;

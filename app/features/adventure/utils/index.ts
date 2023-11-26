@@ -1,4 +1,8 @@
-import { FieldDirection, FieldPosition, ShortFieldPosition } from "@/types";
+import {
+  FieldDirection,
+  FieldPosition,
+  ShortFieldPosition,
+} from "@/app/features/adventure/types";
 
 export function ShortPositionToPosition(shortPosition: string): FieldPosition {
   const [x, y] = shortPosition.split("-").map((v) => Number(v));

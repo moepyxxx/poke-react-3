@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ActionSelect, BattlePokemon, BattleState } from "../types";
 import { useWatch } from "@/features/adventure/hooks/useWatch";
 import { ActionHistory } from "@/features/adventure/hooks";
@@ -130,10 +130,15 @@ export const useBattle = ({
     });
   };
 
+  const isLineNotStarted = useMemo(() => {
+    return lines.length === 0;
+  }, [lines]);
+
   useWatch(latestAction, (action) => {
     if (latestAction == null) return;
+
     if (battleState === "startBattle") {
-      if (lines.length === 0) {
+      if (isLineNotStarted) {
         startBattle();
         return;
       }
@@ -165,7 +170,7 @@ export const useBattle = ({
     }
 
     if (battleState === "executeAction") {
-      if (lines.length === 0) {
+      if (isLineNotStarted) {
         executeAction();
         return;
       }
@@ -180,7 +185,7 @@ export const useBattle = ({
     }
 
     if (battleState === "endBattle") {
-      if (lines.length === 0) {
+      if (isLineNotStarted) {
         endBattle();
         return;
       }

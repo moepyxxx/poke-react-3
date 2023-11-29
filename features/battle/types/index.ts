@@ -22,6 +22,16 @@ export type BattlePokemon = {
   }[];
 };
 
+export type BattlePokemonStatus = {
+  uId: string;
+  name: string;
+  level: number;
+  status: {
+    hp: number;
+  };
+  workIds: number[];
+};
+
 export type BattleState =
   | "startBattle"
   | "selectAction"

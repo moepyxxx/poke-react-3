@@ -3,6 +3,7 @@ import { ActionSelect, BattlePokemon, BattleState } from "../types";
 import { useWatch } from "@/features/adventure/hooks/useWatch";
 import { ActionHistory } from "@/features/adventure/hooks";
 import { useBattleLines } from "./useBattleLines";
+import { useBattleSystems } from "./useBattleSystems";
 
 type Options = {
   /** 手持ちのポケモン */
@@ -16,7 +17,11 @@ type Options = {
   /** バトルステータスの変更 */
   onChangeBattleState: (state: BattleState) => void;
 };
+
 // TODO: やせいのポケモン以外にも戦闘が出てくることを考えながら実装する
+/**
+ * ポケモンバトル全体を制御する
+ */
 export const useBattle = ({
   onHandPokemons,
   enemyPokemon,
@@ -43,6 +48,15 @@ export const useBattle = ({
     onHandPokemons,
     enemyPokemon,
     latestAction,
+  });
+
+  const {
+    calculateEffect,
+    calculateExperience,
+    getAfterBattleInBattlePokemonStatus,
+  } = useBattleSystems({
+    onHandPokemons,
+    enemyPokemon,
   });
 
   const handleChangeBattleState = (battleState: BattleState) => {

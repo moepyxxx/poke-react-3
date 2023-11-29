@@ -19,7 +19,10 @@ type Options = {
   /** あいてのポケモン */
   enemyPokemon: BattlePokemon;
 };
-/** バトル中の台詞を構築・制御する */
+
+/**
+ * バトル中の台詞を構築・制御する
+ */
 export const useBattleLines = ({ onHandPokemons, enemyPokemon }: Options) => {
   const [lines, setLines] = useState<string[]>([]);
   const [currentLineIndex, setCurrentLineIndex] = useState<number>(0);

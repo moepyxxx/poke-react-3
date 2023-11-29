@@ -1,5 +1,5 @@
 import { ControllerAction } from "@/features/adventure/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type ActionHistory = {
   action: ControllerAction;

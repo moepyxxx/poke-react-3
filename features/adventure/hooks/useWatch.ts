@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isEqual } from "lodash";
 
 /**
  * 変更があった場合のみcallbackを実行する
  */
 export const useWatch = <T>(value: T, callback: (newValue: T) => void) => {
-  const [prevState, setPrevState] = useState<T | null>(null);
-  const [state, setState] = useState(value);
+  const prevValue = useRef<T | undefined>();
 
   useEffect(() => {
-    if (isEqual(prevState, value)) {
+    if (isEqual(prevValue.current, value)) {
       return;
     }
 
-    setPrevState(state);
-    setState(value);
+    prevValue.current = value;
+
     // setStateの実行が完了するまでにタイムラグがあるため
     // TODO: なんとかしたい
     setTimeout(() => callback(value), 100);
-  }, [callback, value, prevState, state]);
-  return state;
+  }, [callback, value, prevValue]);
+
+  return "hoge";
 };

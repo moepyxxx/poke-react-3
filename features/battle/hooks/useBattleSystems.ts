@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { BattlePokemon, BattlePokemonStatus } from "../types";
+import {
+  BattlePokemon,
+  BattlePokemonStatus,
+  ExecuteActionEffect,
+} from "../types";
 
 type Options = {
   /** 手持ちのポケモン */
@@ -33,8 +37,24 @@ export const useBattleSystems = ({ onHandPokemons, enemyPokemon }: Options) => {
   /**
    * こうげきの演算
    */
-  const calculateEffect = () => {
-    return;
+  const calculateEffect = (
+    actionUId: string,
+    targetUId: string,
+    workId: number
+  ): Omit<ExecuteActionEffect, "targetType" | "targetUId"> => {
+    return {
+      status: "hp",
+      effectLevel: "normal",
+      upOrDown: "down",
+      count: 10,
+    };
+  };
+
+  /**
+   * こうげき順の演算
+   */
+  const calculateOrder = (): ("enemy" | "onHand")[] => {
+    return ["onHand", "enemy"];
   };
 
   /**
@@ -51,9 +71,19 @@ export const useBattleSystems = ({ onHandPokemons, enemyPokemon }: Options) => {
     return inBattlePokemonStatus;
   };
 
+  const getHpRemain = () => {
+    return {
+      inBattlePokemon: inBattlePokemonStatus.status.hp,
+      enemyPokemon: 0, // 1ターンで倒したステータスになるよう一旦仮置き
+      // enemyPokemon: enemyPokemonStatus.status.hp,
+    };
+  };
+
   return {
     calculateEffect,
     calculateExperience,
+    calculateOrder,
     getAfterBattleInBattlePokemonStatus,
+    getHpRemain,
   };
 };

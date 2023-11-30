@@ -54,6 +54,15 @@ export const useBattleLines = ({ onHandPokemons, enemyPokemon }: Options) => {
     setCurrentLineIndex(0);
   };
 
+  const setReadyActionLines = ({
+    inBattlePokemonName,
+  }: {
+    inBattlePokemonName: string;
+  }) => {
+    setLines([`${inBattlePokemonName}はどうする？`]);
+    setCurrentLineIndex(0);
+  };
+
   const setExecuteActionLines = (results: ExecuteActionResult[]) => {
     setLines(
       results
@@ -121,6 +130,7 @@ export const useBattleLines = ({ onHandPokemons, enemyPokemon }: Options) => {
     lines,
     currentLineIndex,
     setBattleStartLines,
+    setReadyActionLines,
     setExecuteActionLines,
     setBattleEndLines,
     isLineEnd,

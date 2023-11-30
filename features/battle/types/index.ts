@@ -34,6 +34,7 @@ export type BattlePokemonStatus = {
 
 export type BattleState =
   | "startBattle"
+  | "readyAction"
   | "selectAction"
   | "executeAction"
   | "endBattle";
@@ -48,20 +49,22 @@ export type ActionSelectAttack = {
 
 export type BattlePokemonType = "onHand" | "enemy";
 
+export type ExecuteActionEffect = {
+  targetType: BattlePokemonType;
+  targetUId: string;
+  status: "hp"; // HP, 攻撃力, 防御力など
+  effectLevel: "notEnough" | "normal" | "critical";
+  upOrDown: "up" | "down";
+  count: number;
+};
+
 export type ExecuteActionResult = {
   action: {
     pokemonUId: string;
     type: BattlePokemonType;
     workName: string;
   };
-  effect: {
-    targetType: BattlePokemonType;
-    targetUId: string;
-    status: "hp"; // HP, 攻撃力, 防御力など
-    effectLevel: "notEnough" | "normal" | "critical";
-    upOrDown: "up" | "down";
-    count: number;
-  };
+  effect: ExecuteActionEffect;
 };
 
 export type InBattleResult = InBattleResultBattleEnd | InBattleResultInBattle;
@@ -84,4 +87,8 @@ export type InBattleResultBattleEnd = {
 
 export type InBattleResultInBattle = {
   type: "inBattle";
+};
+
+export type BattleResult = {
+  winner: "onHand" | "enemy";
 };

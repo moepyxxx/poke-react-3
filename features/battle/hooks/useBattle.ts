@@ -1,9 +1,16 @@
 import { useMemo, useState } from "react";
-import { ActionSelect, BattlePokemon, BattleState } from "../types";
+import {
+  ActionSelect,
+  BattlePokemon,
+  BattleResult,
+  BattleState,
+  ExecuteActionResult,
+} from "../types";
 import { useWatch } from "@/features/adventure/hooks/useWatch";
 import { ActionHistory } from "@/features/adventure/hooks";
 import { useBattleLines } from "./useBattleLines";
 import { useBattleSystems } from "./useBattleSystems";
+import { useBattleSelect } from "./useBattleSelect";
 
 type Options = {
   /** 手持ちのポケモン */
@@ -32,13 +39,13 @@ export const useBattle = ({
   const [inBattlePokemon, setBattlePokemon] = useState<BattlePokemon>(
     onHandPokemons[0]
   );
-  const [nextSelect, setNextSelect] = useState<ActionSelect | null>(null);
-  const [isBattleFinish, setIsBattleFinish] = useState<boolean>(false);
+  const [battleResult, setBattleResult] = useState<BattleResult | null>(null);
 
   const {
     lines,
     currentLineIndex,
     setBattleEndLines,
+    setReadyActionLines,
     setBattleStartLines,
     setExecuteActionLines,
     isLineEnd,
@@ -53,10 +60,18 @@ export const useBattle = ({
   const {
     calculateEffect,
     calculateExperience,
+    calculateOrder,
     getAfterBattleInBattlePokemonStatus,
+    getHpRemain,
   } = useBattleSystems({
     onHandPokemons,
     enemyPokemon,
+  });
+
+  const { nextSelect } = useBattleSelect({
+    latestAction,
+    battleState,
+    worksCount: inBattlePokemon.works.length,
   });
 
   const handleChangeBattleState = (battleState: BattleState) => {
@@ -67,7 +82,7 @@ export const useBattle = ({
   const changeNextAction = () => {};
 
   const startBattle = () => {
-    setIsBattleFinish(false);
+    setBattleResult(null);
 
     // TODO: 必要があれば何かする
     setBattleStartLines({
@@ -75,52 +90,69 @@ export const useBattle = ({
         inBattlePokemon.basic.nickname || inBattlePokemon.basic.name,
       enemyPokemonName: enemyPokemon.basic.name,
     });
+  };
 
-    // TODO: selectのタイミングでセットする
-    setNextSelect({
-      type: "attack",
-      workId: 4,
+  const readyAction = () => {
+    setReadyActionLines({
+      inBattlePokemonName:
+        inBattlePokemon.basic.nickname || inBattlePokemon.basic.name,
     });
   };
 
   const executeAction = () => {
-    // 選択を元に相手の戦闘も自動試算して結果を計算する
-    // 互いのポケモンのステータスを変更する
-    // 結果が出た場合は勝利 or 敗北の判定
-    // 結果を返す（勝利が確定した場合はstateをchangeする）
-    setIsBattleFinish(true);
-    setExecuteActionLines([
-      {
+    const effectOrder = calculateOrder();
+    const actionResults = effectOrder.map((actionType): ExecuteActionResult => {
+      const actionPokemon =
+        actionType === "onHand" ? inBattlePokemon : enemyPokemon;
+      const targetPokemon =
+        actionType === "onHand" ? enemyPokemon : inBattlePokemon;
+
+      // TODO: あいてポケモンのworkIdはランダムにする
+      const workId = actionType === "onHand" ? nextSelect?.workId : 1;
+
+      const effect = calculateEffect(
+        actionPokemon.basic.pokemonUId,
+        targetPokemon.basic.pokemonUId,
+        1
+      );
+      return {
         action: {
-          pokemonUId: "ダミー敵",
-          type: "enemy",
-          workName: "たいあたり",
+          pokemonUId: actionPokemon.basic.pokemonUId,
+          type: actionType,
+          workName:
+            actionPokemon.works.find((work) => workId === work.id)?.name || "",
         },
         effect: {
-          targetType: "onHand",
-          targetUId: "ダミー味方",
-          status: "hp",
-          effectLevel: "normal",
-          upOrDown: "down",
-          count: 3,
+          ...effect,
+          targetType: actionType === "onHand" ? "enemy" : "onHand",
+          targetUId: targetPokemon.basic.pokemonUId,
         },
-      },
-      {
-        action: {
-          pokemonUId: "ダミー味方",
-          type: "onHand",
-          workName: "ひのこ",
-        },
-        effect: {
-          targetType: "enemy",
-          targetUId: "ダミー敵",
-          status: "hp",
-          effectLevel: "critical",
-          upOrDown: "down",
-          count: 10,
-        },
-      },
-    ]);
+      };
+    });
+    setExecuteActionLines(actionResults);
+    checkIsBattleFinish();
+  };
+
+  const checkIsBattleFinish = () => {
+    const {
+      inBattlePokemon: inBattlePokemonRemainHp,
+      enemyPokemon: enemyPokemonRemainHp,
+    } = getHpRemain();
+
+    // TODO: じばくとかだと自分も相手も同時に倒れるかも
+
+    if (inBattlePokemonRemainHp <= 0) {
+      setBattleResult({
+        winner: "enemy",
+      });
+      return;
+    }
+    if (enemyPokemonRemainHp <= 0) {
+      setBattleResult({
+        winner: "onHand",
+      });
+      return;
+    }
   };
 
   const endBattle = () => {
@@ -157,6 +189,19 @@ export const useBattle = ({
         return;
       }
       if (isLineEnd) {
+        handleChangeBattleState("readyAction");
+        return;
+      }
+      nextCurrentLineIndex();
+      return;
+    }
+
+    if (battleState === "readyAction") {
+      if (isLineNotStarted) {
+        readyAction();
+        return;
+      }
+      if (isLineEnd) {
         handleChangeBattleState("selectAction");
         return;
       }
@@ -189,7 +234,7 @@ export const useBattle = ({
         return;
       }
       if (isLineEnd) {
-        isBattleFinish
+        battleResult != null
           ? handleChangeBattleState("endBattle")
           : handleChangeBattleState("selectAction");
         return;

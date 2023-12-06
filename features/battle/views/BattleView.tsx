@@ -1,22 +1,21 @@
 "use client";
 
-import { currentLocationAtom } from "@/atoms/currentLocation";
 import { useAtom } from "jotai";
-import {
-  useControllerActionHistories,
-  useGameController,
-} from "@/features/adventure/hooks";
-import { GameControllerView } from "@/features/adventure/components";
-import { useState } from "react";
-import { BattleState } from "../types";
-import { useBattle } from "../hooks/useBattle";
+import { useEffect, useState } from "react";
+import { BattlePokemon } from "../types";
+import { v4 as uuid } from "uuid";
+import { useReadyBattle } from "../hooks/useReadyBattle";
+import { Battle } from "../components/Battle";
+import { onHandPokemonsAtom } from "@/atoms/onHandPokemons";
 
-const SAMPLE_ON_HAND_POKEMONS = [
+const SAMPLE_ON_HAND_POKEMONS: BattlePokemon[] = [
   {
     basic: {
-      pokemonUId: "ダミー味方",
+      pokemonUId: uuid(),
       name: "アチャモ",
       level: 10,
+      imageURL:
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/255.png",
     },
     status: {
       hp: {
@@ -61,11 +60,13 @@ const SAMPLE_ON_HAND_POKEMONS = [
   },
 ];
 
-const SAMPLE_ENEMY_POKEMON = {
+const SAMPLE_ENEMY_POKEMON: BattlePokemon = {
   basic: {
-    pokemonUId: "ダミー敵",
+    pokemonUId: uuid(),
     name: "ジグザグマ",
     level: 3,
+    imageURL:
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/263.png",
   },
   status: {
     hp: {
@@ -94,42 +95,28 @@ const SAMPLE_ENEMY_POKEMON = {
 };
 
 export const BattleView = () => {
-  const [stateCurrentLocation] = useAtom(currentLocationAtom);
-  const [battleState, setBattleState] = useState<BattleState>("startBattle");
+  const [onHandPokemons] = useAtom(onHandPokemonsAtom);
 
-  const onChangeBattleState = (state: BattleState) => setBattleState(state);
+  const [battlePokemon, setBattlePokemon] = useState<BattlePokemon | null>(
+    null
+  );
+  const { setEnemyBattlePokemon, setOnBattlePokemon } = useReadyBattle();
 
-  const { latestAction, onControllerAct } = useControllerActionHistories();
+  useEffect(() => {
+    setEnemy();
+  }, []);
 
-  const { controllerOptions } = useGameController({
-    onControllerAct,
-  });
+  const setEnemy = async () => {
+    const pokemon = await setEnemyBattlePokemon();
+    setBattlePokemon(pokemon);
+  };
 
-  const { lines, currentLineIndex, nextSelect } = useBattle({
-    onHandPokemons: SAMPLE_ON_HAND_POKEMONS,
-    enemyPokemon: SAMPLE_ENEMY_POKEMON,
-    latestAction,
-    battleState,
-    onChangeBattleState,
-  });
-
-  return (
-    <div className="p-5">
-      <p>バトルだ！</p>
-      <p>battle state: {battleState}</p>
-      <p>line: {lines.length > 0 ? lines[currentLineIndex] : ""}</p>
-      <p>
-        (line数:{lines.length}, currentIndex:{currentLineIndex})
-      </p>
-      <p>
-        次のこうげき:
-        {nextSelect == null
-          ? "なし"
-          : SAMPLE_ON_HAND_POKEMONS[0].works.find(
-              (work) => work.id === nextSelect.workId
-            )?.name}
-      </p>
-      <GameControllerView controllerOptions={controllerOptions} />
-    </div>
+  return battlePokemon == null ? (
+    ""
+  ) : (
+    <Battle
+      enemyPokemon={battlePokemon}
+      onHandPokemon={setOnBattlePokemon(onHandPokemons[0])}
+    />
   );
 };

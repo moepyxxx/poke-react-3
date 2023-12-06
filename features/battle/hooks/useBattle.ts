@@ -14,7 +14,7 @@ import { useBattleSelect } from "./useBattleSelect";
 
 type Options = {
   /** 手持ちのポケモン */
-  onHandPokemons: BattlePokemon[];
+  onHandPokemon: BattlePokemon;
   /** 相手のポケモン */
   enemyPokemon: BattlePokemon;
   /** 最新のアクション */
@@ -30,15 +30,14 @@ type Options = {
  * ポケモンバトル全体を制御する
  */
 export const useBattle = ({
-  onHandPokemons,
+  onHandPokemon,
   enemyPokemon,
   latestAction,
   battleState,
   onChangeBattleState,
 }: Options) => {
-  const [inBattlePokemon, setBattlePokemon] = useState<BattlePokemon>(
-    onHandPokemons[0]
-  );
+  const [inBattlePokemon, setBattlePokemon] =
+    useState<BattlePokemon>(onHandPokemon);
   const [battleResult, setBattleResult] = useState<BattleResult | null>(null);
 
   const {
@@ -52,7 +51,7 @@ export const useBattle = ({
     nextCurrentLineIndex,
     resetLines,
   } = useBattleLines({
-    onHandPokemons,
+    onHandPokemon,
     enemyPokemon,
     latestAction,
   });
@@ -64,7 +63,7 @@ export const useBattle = ({
     getAfterBattleInBattlePokemonStatus,
     getHpRemain,
   } = useBattleSystems({
-    onHandPokemons,
+    onHandPokemon,
     enemyPokemon,
   });
 
@@ -156,23 +155,27 @@ export const useBattle = ({
   };
 
   const endBattle = () => {
-    // 経験値を計算する
+    if (battleResult == null) return;
+
+    const experiences = calculateExperience();
+
     setBattleEndLines({
       type: "endBattle",
       winner: {
-        type: "onHand",
-        UId: "ダミー味方",
+        type: battleResult.winner,
+        UId:
+          battleResult.winner === "onHand"
+            ? inBattlePokemon.basic.pokemonUId
+            : enemyPokemon.basic.pokemonUId,
       },
       lose: {
-        type: "enemy",
-        UId: "ダミー敵",
+        type: battleResult.winner === "onHand" ? "enemy" : "onHand",
+        UId:
+          battleResult.winner === "onHand"
+            ? enemyPokemon.basic.pokemonUId
+            : inBattlePokemon.basic.pokemonUId,
       },
-      experiences: [
-        {
-          pokemonUId: "ダミー味方",
-          experience: 5,
-        },
-      ],
+      experiences,
     });
   };
 

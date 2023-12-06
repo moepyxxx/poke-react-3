@@ -15,7 +15,7 @@ type Options = {
   /** 最新のアクション */
   latestAction: ActionHistory | null;
   /** 手持ちのポケモン */
-  onHandPokemons: BattlePokemon[];
+  onHandPokemon: BattlePokemon;
   /** あいてのポケモン */
   enemyPokemon: BattlePokemon;
 };
@@ -23,7 +23,7 @@ type Options = {
 /**
  * バトル中の台詞を構築・制御する
  */
-export const useBattleLines = ({ onHandPokemons, enemyPokemon }: Options) => {
+export const useBattleLines = ({ onHandPokemon, enemyPokemon }: Options) => {
   const [lines, setLines] = useState<string[]>([]);
   const [currentLineIndex, setCurrentLineIndex] = useState<number>(0);
 
@@ -69,12 +69,12 @@ export const useBattleLines = ({ onHandPokemons, enemyPokemon }: Options) => {
         .map((result) => {
           const actionPokemon = getPokemonNameFromUId(
             result.action.pokemonUId,
-            result.action.type === "onHand" ? onHandPokemons : [enemyPokemon]
+            result.action.type === "onHand" ? [onHandPokemon] : [enemyPokemon]
           );
           const targetPokemon = getPokemonNameFromUId(
             result.effect.targetUId,
             result.effect.targetType === "onHand"
-              ? onHandPokemons
+              ? [onHandPokemon]
               : [enemyPokemon]
           );
           const lines = [`${actionPokemon}の${result.action.workName}`];
@@ -104,7 +104,7 @@ export const useBattleLines = ({ onHandPokemons, enemyPokemon }: Options) => {
   const setBattleEndLines = (result: InBattleResultBattleEnd) => {
     const losePokemon = getPokemonNameFromUId(
       result.lose.UId,
-      result.lose.type === "onHand" ? onHandPokemons : [enemyPokemon]
+      result.lose.type === "onHand" ? [onHandPokemon] : [enemyPokemon]
     );
 
     const lines = [`${losePokemon}はたおれた`];
@@ -114,10 +114,9 @@ export const useBattleLines = ({ onHandPokemons, enemyPokemon }: Options) => {
     if (result.winner.type === "onHand" && result.experiences) {
       lines.push(
         ...result.experiences.map((experience) => {
-          const pokemon = getPokemonNameFromUId(
-            experience.pokemonUId,
-            onHandPokemons
-          );
+          const pokemon = getPokemonNameFromUId(experience.pokemonUId, [
+            onHandPokemon,
+          ]);
           return `${pokemon}は${experience.experience}のけいけんちをもらった`;
         })
       );

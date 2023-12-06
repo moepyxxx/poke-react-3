@@ -1,35 +1,13 @@
-export type BattlePokemon = {
-  basic: {
-    pokemonUId: string;
-    name: string;
-    nickname?: string;
-    level: number;
-  };
-  status: {
-    hp: {
-      max: number;
-      remain: number;
-    };
-    // TODO: add status
-  };
-  works: {
-    id: number;
-    name: string;
-    pp: {
-      max: number;
-      remain: number;
-    };
-  }[];
-};
+import {
+  BasicStatus,
+  BattlePokemonStatus,
+  WorkStatus,
+} from "@/atoms/onHandPokemons";
 
-export type BattlePokemonStatus = {
-  uId: string;
-  name: string;
-  level: number;
-  status: {
-    hp: number;
-  };
-  workIds: number[];
+export type BattlePokemon = {
+  basic: BasicStatus;
+  status: BattlePokemonStatus;
+  works: WorkStatus[];
 };
 
 export type BattleState =

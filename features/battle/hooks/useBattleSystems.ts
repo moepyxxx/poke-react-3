@@ -1,38 +1,21 @@
 import { useState } from "react";
-import {
-  BattlePokemon,
-  BattlePokemonStatus,
-  ExecuteActionEffect,
-} from "../types";
+import { BattlePokemon, ExecuteActionEffect } from "../types";
 
 type Options = {
   /** 手持ちのポケモン */
-  onHandPokemons: BattlePokemon[];
+  onHandPokemon: BattlePokemon;
   /** あいてのポケモン */
   enemyPokemon: BattlePokemon;
 };
 
-function getPokemonStatus(pokemon: BattlePokemon): BattlePokemonStatus {
-  return {
-    uId: pokemon.basic.pokemonUId,
-    name: pokemon.basic.name,
-    level: pokemon.basic.level,
-    status: {
-      hp: pokemon.status.hp.remain,
-    },
-    // ポケモンの種類やlevelから計算して入れる
-    workIds: pokemon.works.map((work) => work.id),
-  };
-}
-
 /**
  * バトル中のポケモンステータスの演算を構築・制御する
  */
-export const useBattleSystems = ({ onHandPokemons, enemyPokemon }: Options) => {
-  const [inBattlePokemonStatus, setInBattlePokemonStatus] =
-    useState<BattlePokemonStatus>(getPokemonStatus(onHandPokemons[0]));
+export const useBattleSystems = ({ onHandPokemon, enemyPokemon }: Options) => {
+  const [inBattlePokemon, setInBattlePokemon] =
+    useState<BattlePokemon>(onHandPokemon);
   const [enemyPokemonStatus, setEnemyPokemonStatus] =
-    useState<BattlePokemonStatus>(getPokemonStatus(enemyPokemon));
+    useState<BattlePokemon>(enemyPokemon);
 
   /**
    * こうげきの演算
@@ -61,21 +44,26 @@ export const useBattleSystems = ({ onHandPokemons, enemyPokemon }: Options) => {
    * けいけんちの演算
    */
   const calculateExperience = () => {
-    return;
+    return [
+      {
+        pokemonUId: inBattlePokemon.basic.pokemonUId,
+        experience: 100,
+      },
+    ];
   };
 
   /**
    * バトル後のポケモンのステータスを取得
    */
   const getAfterBattleInBattlePokemonStatus = () => {
-    return inBattlePokemonStatus;
+    return inBattlePokemon;
   };
 
   const getHpRemain = () => {
     return {
-      inBattlePokemon: inBattlePokemonStatus.status.hp,
+      inBattlePokemon: inBattlePokemon.status.hp.remain,
       enemyPokemon: 0, // 1ターンで倒したステータスになるよう一旦仮置き
-      // enemyPokemon: enemyPokemonStatus.status.hp,
+      // enemyPokemon: enemyPokemon.status.hp.remain,
     };
   };
 

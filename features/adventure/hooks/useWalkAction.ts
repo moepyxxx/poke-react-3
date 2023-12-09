@@ -62,7 +62,10 @@ export const useWalkAction = ({
       // 進める場合は1マス進む
       const fieldMap =
         fieldObjectMaps[calculateShortPosition(fieldPosition, fieldDirection)];
-      if (!fieldMap.objects || isPassable(fieldMap.objects)) {
+      if (
+        fieldMap.base !== "black" &&
+        (!fieldMap.objects || isPassable(fieldMap.objects))
+      ) {
         onChangeFieldPosition(nextPosition);
         return;
       }

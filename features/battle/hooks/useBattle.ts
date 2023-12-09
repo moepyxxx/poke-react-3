@@ -11,6 +11,10 @@ import { ActionHistory } from "@/features/adventure/hooks";
 import { useBattleLines } from "./useBattleLines";
 import { useBattleSystems } from "./useBattleSystems";
 import { useBattleSelect } from "./useBattleSelect";
+import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
+import { onHandPokemonsAtom } from "@/atoms/onHandPokemons";
+import { currentLocationAtom } from "@/atoms/currentLocation";
 
 type Options = {
   /** 手持ちのポケモン */
@@ -39,6 +43,10 @@ export const useBattle = ({
   const [inBattlePokemon, setBattlePokemon] =
     useState<BattlePokemon>(onHandPokemon);
   const [battleResult, setBattleResult] = useState<BattleResult | null>(null);
+
+  const router = useRouter();
+  const [, setOnHandPokemons] = useAtom(onHandPokemonsAtom);
+  const [currentLocation] = useAtom(currentLocationAtom);
 
   const {
     lines,
@@ -83,7 +91,6 @@ export const useBattle = ({
   const startBattle = () => {
     setBattleResult(null);
 
-    // TODO: 必要があれば何かする
     setBattleStartLines({
       inBattlePokemonName:
         inBattlePokemon.basic.nickname || inBattlePokemon.basic.name,
@@ -179,6 +186,32 @@ export const useBattle = ({
     });
   };
 
+  const breakBattle = () => {
+    const afterBattleInBattlePokemonStatus =
+      getAfterBattleInBattlePokemonStatus();
+    setOnHandPokemons((prev) => {
+      const [pokemon, ...rest] = prev;
+      return [
+        {
+          ...pokemon,
+          battle: {
+            ...pokemon.battle,
+            status: {
+              ...pokemon.battle.status,
+              hp: {
+                ...pokemon.battle.status.hp,
+                remain: afterBattleInBattlePokemonStatus.status.hp.remain,
+              },
+            },
+          },
+        },
+        ...rest,
+      ];
+    });
+
+    router.push(`/samples/fields/${currentLocation?.field}`);
+  };
+
   const isLineNotStarted = useMemo(() => {
     return lines.length === 0;
   }, [lines]);
@@ -252,8 +285,7 @@ export const useBattle = ({
         return;
       }
       if (isLineEnd) {
-        // TODO: 終了
-        console.log("終了!");
+        breakBattle();
         return;
       }
       nextCurrentLineIndex();

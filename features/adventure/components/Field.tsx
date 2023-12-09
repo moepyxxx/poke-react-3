@@ -27,14 +27,19 @@ import { SubSelectScreen } from "@/components/SubSelectScreen";
 
 type Props = {
   field: string;
+  initialDirection: FieldDirection;
+  initialPosition: FieldPosition;
 };
-export const Field: FC<Props> = ({ field }: { field: string }) => {
+export const Field: FC<Props> = ({
+  field,
+  initialDirection,
+  initialPosition,
+}) => {
   const [fieldMode, setFieldMode] = useState<FieldMode>("walk");
-  const [fieldDirection, setFieldDirection] = useState<FieldDirection>("right");
-  const [fieldPosition, setFieldPosition] = useState<FieldPosition>({
-    x: 1 + FIELD_MIDDLE_POSITION,
-    y: 1 + FIELD_MIDDLE_POSITION,
-  });
+  const [fieldDirection, setFieldDirection] =
+    useState<FieldDirection>(initialDirection);
+  const [fieldPosition, setFieldPosition] =
+    useState<FieldPosition>(initialPosition);
 
   const onChangeFieldMode = (mode: FieldMode) => {
     setFieldMode(mode);
@@ -81,6 +86,7 @@ export const Field: FC<Props> = ({ field }: { field: string }) => {
     fieldMode,
     fieldPosition,
     fieldDirection,
+    currentField: field,
   });
 
   return (

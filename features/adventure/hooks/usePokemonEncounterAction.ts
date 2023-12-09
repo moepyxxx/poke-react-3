@@ -9,7 +9,7 @@ import {
 import { positionToShortPosition } from "@/features/adventure/utils";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { ActionHistory } from "./useActionHistories";
 import { useWatch } from "./useWatch";
 
@@ -19,6 +19,7 @@ export type Options = {
   fieldMode: FieldMode;
   fieldPosition: FieldPosition;
   fieldDirection: FieldDirection;
+  currentField: string;
 };
 
 /**
@@ -30,6 +31,7 @@ export const usePokemonEncounterAction = ({
   fieldMode,
   fieldPosition,
   fieldDirection,
+  currentField,
 }: Options) => {
   const [, saveStateCurrentLocation] = useAtom(currentLocationAtom);
   const router = useRouter();
@@ -79,11 +81,10 @@ export const usePokemonEncounterAction = ({
 
   const onEncounter = useCallback(() => {
     saveStateCurrentLocation({
-      field: "sample",
+      field: currentField,
       position: fieldPosition,
       direction: fieldDirection,
     });
-    // バトル画面へ遷移
     router.push("/samples/battle");
   }, [saveStateCurrentLocation, fieldPosition, fieldDirection, router]);
 

@@ -28,16 +28,7 @@ export const useReadyBattle = () => {
       status: {
         hp: pokemon.battle.status.hp,
       },
-      works: [
-        {
-          id: 1,
-          name: "たいあたり",
-          pp: {
-            max: 35,
-            remain: 35,
-          },
-        },
-      ],
+      works: pokemon.battle.works,
     };
   };
   return {

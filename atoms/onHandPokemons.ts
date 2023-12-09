@@ -57,6 +57,30 @@ export const onHandPokemonsAtom = atom<OnHandPokemon[]>([
             remain: 35,
           },
         },
+        {
+          id: 2,
+          name: "なきごえ",
+          pp: {
+            max: 35,
+            remain: 35,
+          },
+        },
+        {
+          id: 3,
+          name: "すなかけ",
+          pp: {
+            max: 35,
+            remain: 35,
+          },
+        },
+        {
+          id: 4,
+          name: "ひのこ",
+          pp: {
+            max: 35,
+            remain: 35,
+          },
+        },
       ],
     },
   },

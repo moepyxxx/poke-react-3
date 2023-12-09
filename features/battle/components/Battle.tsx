@@ -8,10 +8,10 @@ import { GameController } from "@/components/GameController";
 import { FC, useState } from "react";
 import { BattlePokemon, BattleState } from "../types";
 import { useBattle } from "../hooks/useBattle";
-import Image from "next/image";
 import { BattleScreen } from "./BattleScreen";
 import { GameScreen } from "@/components/GameScreen";
 import { LineScreen } from "@/components/LineScreen";
+import { MainSelectScreen } from "@/components/MainSelectScreen";
 
 type Props = {
   onHandPokemon: BattlePokemon;
@@ -44,6 +44,15 @@ export const Battle: FC<Props> = ({ onHandPokemon, enemyPokemon }) => {
           enemyPokemon={enemyPokemon}
         />
         {lines.length > 0 && <LineScreen line={lines[currentLineIndex]} />}
+        {battleState === "selectAction" && nextSelect != null && (
+          <MainSelectScreen<number>
+            currentSelectKey={nextSelect.workId}
+            selectableItems={onHandPokemon.works.map((work) => ({
+              label: work.name,
+              key: work.id,
+            }))}
+          />
+        )}
       </GameScreen>
       {/* <p>バトルだ！</p>
       <p>battle state: {battleState}</p>

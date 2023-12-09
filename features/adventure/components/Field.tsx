@@ -22,6 +22,8 @@ import { useTalkAction } from "@/features/adventure/hooks/useTalkAction";
 import { useControllerActionHistories } from "@/features/adventure/hooks/useActionHistories";
 import { useWalkAction } from "@/features/adventure/hooks/useWalkAction";
 import { GameScreen } from "@/components/GameScreen";
+import { LineScreen } from "@/components/LineScreen";
+import { SubSelectScreen } from "@/components/SubSelectScreen";
 
 type Props = {
   field: string;
@@ -92,6 +94,16 @@ export const Field: FC<Props> = ({ field }: { field: string }) => {
           currentFieldPosition={fieldPosition}
           currentFieldDirection={fieldDirection}
         />
+        {currentTalk && <LineScreen line={currentTalk.talk} />}
+        {currentSelectionLabel && (
+          <SubSelectScreen<string>
+            currentSelectKey={currentSelectionLabel}
+            selectableItems={currentSelection.map((selection) => ({
+              label: selection.talk,
+              key: selection.nextLabel,
+            }))}
+          />
+        )}
       </GameScreen>
       {/* debug<div className="pl-12">
           <h1>field: {field}</h1>

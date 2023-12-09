@@ -1,0 +1,9 @@
+{
+  "name": "masters",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "main": "index.ts",
+  "volta": {
+    "extends": "../package.json"
+  }
+}

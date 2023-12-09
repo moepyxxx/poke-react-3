@@ -1,0 +1,13 @@
+{
+  "name": "pokemon-practice",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "volta": {
+    "node": "18.12.1",
+    "yarn": "1.22.19"
+  }
+}

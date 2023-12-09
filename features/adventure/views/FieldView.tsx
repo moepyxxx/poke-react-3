@@ -1,6 +1,6 @@
 "use client";
 
-import { GameControllerView } from "@/features/adventure/components/GameControllerView";
+import { GameController } from "@/components/GameController/GameController";
 import { useGameController } from "@/features/adventure/hooks/useGameController";
 import {
   FIELD_ALL_TILE_COUNT,
@@ -10,7 +10,7 @@ import {
   SAMPLE_FIELD_OBJECTS,
   TALK_MAPS,
 } from "../datas/sample";
-import { GameScreenView } from "@/features/adventure/components/GameScreenView";
+import { GameScreen } from "@/features/adventure/components/GameScreen";
 import { usePokemonEncounterAction } from "@/features/adventure/hooks/usePokemonEncounterAction";
 import { useState } from "react";
 import {
@@ -78,9 +78,9 @@ export const FieldView = ({ field }: { field: string }) => {
   });
 
   return (
-    <main className="p-24">
+    <main className="p-8">
       <div className="mx-0 my-auto flex items-start">
-        <GameScreenView
+        <GameScreen
           fieldSize={FIELD_SIZE}
           fieldAllTileCount={FIELD_ALL_TILE_COUNT}
           fieldVisibleTileCount={FIELD_VISIBLE_TILE_COUNT}
@@ -88,7 +88,7 @@ export const FieldView = ({ field }: { field: string }) => {
           currentFieldPosition={fieldPosition}
           currentFieldDirection={fieldDirection}
         />
-        <div className="pl-12">
+        {/* debug<div className="pl-12">
           <h1>field: {field}</h1>
           <h2>current</h2>
           <p>mode: {fieldMode}</p>
@@ -104,9 +104,9 @@ export const FieldView = ({ field }: { field: string }) => {
               talk: {selection.talk}, next: {selection.nextLabel}
             </p>
           ))}
-        </div>
+        </div> */}
       </div>
-      <GameControllerView controllerOptions={controllerOptions} />
+      <GameController controllerOptions={controllerOptions} />
     </main>
   );
 };

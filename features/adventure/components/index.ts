@@ -1,1 +1,1 @@
-export * from "./GameControllerView";
+export * from "./GameScreen";

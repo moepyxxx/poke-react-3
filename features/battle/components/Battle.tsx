@@ -4,7 +4,7 @@ import {
   useControllerActionHistories,
   useGameController,
 } from "@/features/adventure/hooks";
-import { GameControllerView } from "@/features/adventure/components";
+import { GameController } from "@/components/GameController";
 import { FC, useState } from "react";
 import { BattlePokemon, BattleState } from "../types";
 import { useBattle } from "../hooks/useBattle";
@@ -60,7 +60,7 @@ export const Battle: FC<Props> = ({ onHandPokemon, enemyPokemon }) => {
         width="100"
         height="100"
       />
-      <GameControllerView controllerOptions={controllerOptions} />
+      <GameController controllerOptions={controllerOptions} />
     </div>
   );
 };

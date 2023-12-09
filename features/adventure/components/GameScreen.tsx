@@ -25,7 +25,7 @@ type Props = {
   currentFieldPosition: FieldPosition;
   currentFieldDirection: FieldDirection;
 };
-export const GameScreenView: FC<Props> = ({
+export const GameScreen: FC<Props> = ({
   fieldSize,
   fieldAllTileCount,
   fieldVisibleTileCount,
@@ -38,8 +38,13 @@ export const GameScreenView: FC<Props> = ({
   const getBoyDirection = useGetBoyDirection();
 
   return (
-    <div className="relative w-20 h-20">
-      <div className="flex justify-center items-center absolute overflow-hidden top-0 left-0">
+    <div className="relative w-20 h-20 my-20 mx-auto">
+      <div
+        className="flex justify-center items-center absolute overflow-hidden"
+        style={{
+          top: "-24px",
+          left: "-24px",
+        }}>
         <motion.div
           initial={false}
           className="flex flex-wrap justify-center items-center relative"
@@ -106,7 +111,7 @@ export const GameScreenView: FC<Props> = ({
           style={{
             width: fieldAllTileCount * 24,
             height: fieldAllTileCount * 24,
-            border: "24px solid #fff",
+            border: "24px solid #e5e5e5",
           }}
         />
       </div>

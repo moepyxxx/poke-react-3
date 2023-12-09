@@ -265,5 +265,6 @@ export const useBattle = ({
     lines,
     currentLineIndex,
     nextSelect,
+    battleResult,
   };
 };

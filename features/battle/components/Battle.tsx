@@ -28,7 +28,7 @@ export const Battle: FC<Props> = ({ onHandPokemon, enemyPokemon }) => {
     onControllerAct,
   });
 
-  const { lines, currentLineIndex, nextSelect } = useBattle({
+  const { lines, currentLineIndex, nextSelect, battleResult } = useBattle({
     onHandPokemon,
     enemyPokemon,
     latestAction,
@@ -42,6 +42,8 @@ export const Battle: FC<Props> = ({ onHandPokemon, enemyPokemon }) => {
         <BattleScreen
           onHandPokemon={onHandPokemon}
           enemyPokemon={enemyPokemon}
+          winner={battleResult == null ? null : battleResult.winner}
+          battleState={battleState}
         />
         {lines.length > 0 && <LineScreen line={lines[currentLineIndex]} />}
         {battleState === "selectAction" && nextSelect != null && (

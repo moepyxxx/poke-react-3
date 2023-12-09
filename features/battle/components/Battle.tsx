@@ -9,6 +9,9 @@ import { FC, useState } from "react";
 import { BattlePokemon, BattleState } from "../types";
 import { useBattle } from "../hooks/useBattle";
 import Image from "next/image";
+import { BattleScreen } from "./BattleScreen";
+import { GameScreen } from "@/components/GameScreen";
+import { LineScreen } from "@/components/LineScreen";
 
 type Props = {
   onHandPokemon: BattlePokemon;
@@ -34,8 +37,15 @@ export const Battle: FC<Props> = ({ onHandPokemon, enemyPokemon }) => {
   });
 
   return (
-    <div className="p-5">
-      <p>バトルだ！</p>
+    <main>
+      <GameScreen>
+        <BattleScreen
+          onHandPokemon={onHandPokemon}
+          enemyPokemon={enemyPokemon}
+        />
+        {lines.length > 0 && <LineScreen line={lines[currentLineIndex]} />}
+      </GameScreen>
+      {/* <p>バトルだ！</p>
       <p>battle state: {battleState}</p>
       <p>line: {lines.length > 0 ? lines[currentLineIndex] : ""}</p>
       <p>
@@ -47,20 +57,10 @@ export const Battle: FC<Props> = ({ onHandPokemon, enemyPokemon }) => {
           ? "なし"
           : onHandPokemon.works.find((work) => work.id === nextSelect.workId)
               ?.name}
-      </p>
-      <Image
-        src={onHandPokemon.basic.imageURL}
-        alt="味方ポケモン"
-        width="100"
-        height="100"
-      />
-      <Image
-        src={enemyPokemon.basic.imageURL}
-        alt="敵ポケモン"
-        width="100"
-        height="100"
-      />
-      <GameController controllerOptions={controllerOptions} />
-    </div>
+      </p> */}
+      <div className="mt-3">
+        <GameController controllerOptions={controllerOptions} />
+      </div>
+    </main>
   );
 };

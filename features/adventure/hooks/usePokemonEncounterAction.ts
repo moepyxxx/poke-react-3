@@ -74,7 +74,7 @@ export const usePokemonEncounterAction = ({
    * 野生ポケモンとの遭遇確率による判定
    */
   const calculateIsEncounter = useCallback(() => {
-    return Math.random() < 0.1;
+    return Math.random() < 0.3;
   }, []);
 
   const onEncounter = useCallback(() => {

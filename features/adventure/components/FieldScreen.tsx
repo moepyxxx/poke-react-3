@@ -25,7 +25,7 @@ type Props = {
   currentFieldPosition: FieldPosition;
   currentFieldDirection: FieldDirection;
 };
-export const GameScreen: FC<Props> = ({
+export const FieldScreen: FC<Props> = ({
   fieldSize,
   fieldAllTileCount,
   fieldVisibleTileCount,

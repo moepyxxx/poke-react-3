@@ -1,1 +1,1 @@
-export const Hello = "hello, master workspace!";
+export const SampleFields = require("./fields/samples.json");

@@ -1,11 +1,23 @@
+"use client";
+
 import { useAtom } from "jotai";
 import { Field } from "../components/Field";
 import { currentLocationAtom } from "@/atoms/currentLocation";
 import { FIELD_MIDDLE_POSITION } from "../datas/sample";
-import { useRouter } from "next/navigation";
+import { FC } from "react";
+import { FieldBase, FieldObject, ShortFieldPosition } from "../types";
 
-export const FieldView = ({ field }: { field: string }) => {
-  const router = useRouter();
+type Props = {
+  field: string;
+  fieldObjectMap: Record<
+    ShortFieldPosition,
+    {
+      base: FieldBase;
+      objects?: FieldObject[];
+    }
+  >;
+};
+export const FieldView: FC<Props> = ({ field, fieldObjectMap }) => {
   const [currentLocation, setCurrentLocation] = useAtom(currentLocationAtom);
   if (!currentLocation) {
     setCurrentLocation({
@@ -13,7 +25,6 @@ export const FieldView = ({ field }: { field: string }) => {
       position: { x: 1 + FIELD_MIDDLE_POSITION, y: 1 + FIELD_MIDDLE_POSITION },
       direction: "below",
     });
-    router.refresh();
     return;
   }
 
@@ -22,6 +33,7 @@ export const FieldView = ({ field }: { field: string }) => {
       field={field}
       initialDirection={currentLocation.direction}
       initialPosition={currentLocation.position}
+      fieldObjectMap={fieldObjectMap}
     />
   );
 };

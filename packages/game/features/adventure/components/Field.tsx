@@ -4,19 +4,20 @@ import { GameController } from "@/components/GameController/GameController";
 import { useGameController } from "@/features/adventure/hooks/useGameController";
 import {
   FIELD_ALL_TILE_COUNT,
-  FIELD_MIDDLE_POSITION,
   FIELD_SIZE,
   FIELD_VISIBLE_TILE_COUNT,
-  SAMPLE_FIELD_OBJECTS,
   TALK_MAPS,
 } from "../datas/sample";
 import { FieldScreen } from "@/features/adventure/components/FieldScreen";
 import { usePokemonEncounterAction } from "@/features/adventure/hooks/usePokemonEncounterAction";
 import { FC, useState } from "react";
 import {
+  FieldBase,
   FieldDirection,
   FieldMode,
+  FieldObject,
   FieldPosition,
+  ShortFieldPosition,
 } from "@/features/adventure/types";
 import { useTalkAction } from "@/features/adventure/hooks/useTalkAction";
 import { useControllerActionHistories } from "@/features/adventure/hooks/useActionHistories";
@@ -29,11 +30,19 @@ type Props = {
   field: string;
   initialDirection: FieldDirection;
   initialPosition: FieldPosition;
+  fieldObjectMap: Record<
+    ShortFieldPosition,
+    {
+      base: FieldBase;
+      objects?: FieldObject[];
+    }
+  >;
 };
 export const Field: FC<Props> = ({
   field,
   initialDirection,
   initialPosition,
+  fieldObjectMap,
 }) => {
   const [fieldMode, setFieldMode] = useState<FieldMode>("walk");
   const [fieldDirection, setFieldDirection] =
@@ -63,7 +72,7 @@ export const Field: FC<Props> = ({
     useTalkAction({
       fieldMode,
       latestAction,
-      fieldObjectMaps: SAMPLE_FIELD_OBJECTS,
+      fieldObjectMaps: fieldObjectMap,
       talkMaps: TALK_MAPS,
       fieldDirection,
       fieldPosition,
@@ -75,14 +84,14 @@ export const Field: FC<Props> = ({
     latestAction,
     fieldPosition,
     fieldDirection,
-    fieldObjectMaps: SAMPLE_FIELD_OBJECTS,
+    fieldObjectMaps: fieldObjectMap,
     onChangeFieldDirection,
     onChangeFieldPosition,
   });
 
   usePokemonEncounterAction({
     latestAction,
-    fieldObjectMaps: SAMPLE_FIELD_OBJECTS,
+    fieldObjectMaps: fieldObjectMap,
     fieldMode,
     fieldPosition,
     fieldDirection,
@@ -96,7 +105,7 @@ export const Field: FC<Props> = ({
           fieldSize={FIELD_SIZE}
           fieldAllTileCount={FIELD_ALL_TILE_COUNT}
           fieldVisibleTileCount={FIELD_VISIBLE_TILE_COUNT}
-          fieldObjects={SAMPLE_FIELD_OBJECTS}
+          fieldObjects={fieldObjectMap}
           currentFieldPosition={fieldPosition}
           currentFieldDirection={fieldDirection}
         />

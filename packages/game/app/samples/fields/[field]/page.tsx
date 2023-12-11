@@ -1,11 +1,13 @@
-"use client";
-
 import { FieldView } from "@/features/adventure/views";
 
-export default function SampleFieldPage({
+export default async function SampleFieldPage({
   params,
 }: {
   params: { field: string };
 }) {
-  return <FieldView field={params.field} />;
+  const fieldObjectMaps = await (
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field_objects`)
+  ).json();
+
+  return <FieldView field={params.field} fieldObjectMap={fieldObjectMaps} />;
 }

@@ -3,9 +3,9 @@ import {
   FieldDirection,
   FieldObjectMap,
   FieldPosition,
-  Talk,
-  TalkSelect,
-  Talks,
+  FieldTalk,
+  FieldTalkMap,
+  FieldTalkSelect,
 } from "@types";
 import { calculateShortPosition } from "@/features/adventure/utils";
 import { useCallback, useState } from "react";
@@ -16,7 +16,7 @@ export type Options = {
   fieldMode: FieldMode;
   latestAction: ActionHistory | null;
   fieldObjectMap: FieldObjectMap;
-  talkMaps: Talks;
+  fieldTalkMap: FieldTalkMap;
   fieldPosition: FieldPosition;
   fieldDirection: FieldDirection;
   onChangeFieldMode: (mode: FieldMode) => void;
@@ -30,16 +30,18 @@ export const useTalkAction = ({
   fieldPosition,
   fieldDirection,
   fieldObjectMap,
-  talkMaps,
+  fieldTalkMap,
   fieldMode,
   onChangeFieldMode,
 }: Options) => {
   const [currentTalkLabel, setCurrentTalkLabel] = useState<string | null>(null);
-  const [currentTalk, setCurrentTalk] = useState<Talk | null>(null);
+  const [currentTalk, setCurrentTalk] = useState<FieldTalk | null>(null);
   const [currentSelectionLabel, setCurrentSelectionLabel] = useState<
     string | null
   >(null);
-  const [currentSelection, setCurrentSelection] = useState<TalkSelect[]>([]);
+  const [currentSelection, setCurrentSelection] = useState<FieldTalkSelect[]>(
+    []
+  );
 
   const onTalk = useCallback(() => {
     // 会話モードの場合
@@ -48,7 +50,7 @@ export const useTalkAction = ({
         throw new Error("currentSelectionLabel is required");
       }
       // 会話継続（選択）の場合
-      const nextTalk = talkMaps[currentTalkLabel].talkScripts.find(
+      const nextTalk = fieldTalkMap[currentTalkLabel].talkScripts.find(
         (script) => script.label === currentSelectionLabel
       );
       if (!nextTalk) {
@@ -73,7 +75,7 @@ export const useTalkAction = ({
       // 会話継続の場合
       if (fieldMode === "talk" && currentTalkLabel != null) {
         // 会話継続（次の会話）の場合
-        const nextTalk = talkMaps[currentTalkLabel].talkScripts.find(
+        const nextTalk = fieldTalkMap[currentTalkLabel].talkScripts.find(
           (script) => script.label === currentTalk?.nextLabel
         );
         if (!nextTalk) {
@@ -93,7 +95,7 @@ export const useTalkAction = ({
   }, [
     onChangeFieldMode,
     setCurrentTalk,
-    talkMaps,
+    fieldTalkMap,
     fieldMode,
     currentTalk,
     currentTalkLabel,
@@ -154,9 +156,9 @@ export const useTalkAction = ({
       return;
     }
     if (fieldMap.type === "person" && fieldMap.talkLabel) {
-      const firstTalk = talkMaps[fieldMap.talkLabel].talkScripts.find(
+      const firstTalk = fieldTalkMap[fieldMap.talkLabel].talkScripts.find(
         (script) =>
-          script.label === talkMaps[fieldMap.talkLabel].initialTalkLabel
+          script.label === fieldTalkMap[fieldMap.talkLabel].initialTalkLabel
       );
       if (!firstTalk) {
         throw new Error("firstTalk is required");
@@ -170,7 +172,7 @@ export const useTalkAction = ({
     fieldDirection,
     fieldPosition,
     fieldObjectMap,
-    talkMaps,
+    fieldTalkMap,
     onChangeFieldMode,
   ]);
 

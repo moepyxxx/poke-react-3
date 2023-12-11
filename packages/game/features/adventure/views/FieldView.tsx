@@ -3,15 +3,20 @@
 import { useAtom } from "jotai";
 import { Field } from "../components/Field";
 import { currentLocationAtom } from "@/atoms/currentLocation";
-import { FIELD_MIDDLE_POSITION } from "../datas/sample";
+import { FIELD_MIDDLE_POSITION } from "config";
 import { FC } from "react";
-import { FieldObjectMap } from "@types";
+import { FieldObjectMap, FieldTalkMap } from "@types";
 
 type Props = {
   field: string;
   fieldObjectMap: FieldObjectMap;
+  fieldTalkMap: FieldTalkMap;
 };
-export const FieldView: FC<Props> = ({ field, fieldObjectMap }) => {
+export const FieldView: FC<Props> = ({
+  field,
+  fieldObjectMap,
+  fieldTalkMap,
+}) => {
   const [currentLocation, setCurrentLocation] = useAtom(currentLocationAtom);
   if (!currentLocation) {
     setCurrentLocation({
@@ -28,6 +33,7 @@ export const FieldView: FC<Props> = ({ field, fieldObjectMap }) => {
       initialDirection={currentLocation.direction}
       initialPosition={currentLocation.position}
       fieldObjectMap={fieldObjectMap}
+      fieldTalkMap={fieldTalkMap}
     />
   );
 };

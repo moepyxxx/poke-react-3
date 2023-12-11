@@ -39,22 +39,6 @@ export type ControllerAction =
   | "onPushLeft"
   | "onPushRight";
 
-export type FieldWalkMap = {
-  mode: "walk";
-};
-
-export type FieldTalkMap = {
-  mode: "talk";
-  talkLabel: string;
-};
-
-export type FieldActionMap = {
-  mode: "action";
-  actionLabel: string;
-};
-
-export type FieldMap = FieldActionMap | FieldWalkMap | FieldTalkMap;
-
 export type FieldMaterial = {
   base: FieldBase;
   objects?: FieldObject[];

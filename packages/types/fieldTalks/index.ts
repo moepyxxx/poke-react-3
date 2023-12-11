@@ -1,20 +1,20 @@
-export type TalkSelect = {
+export type FieldTalkSelect = {
   talk: string;
   nextLabel: string;
 };
 
-export type Talk = {
+export type FieldTalk = {
   talk: string;
   label: string;
   nextLabel?: string;
-  selections?: TalkSelect[];
+  selections?: FieldTalkSelect[];
   action?: () => void;
 };
 
-export type Talks = Record<
+export type FieldTalkMap = Record<
   string,
   {
     initialTalkLabel: string;
-    talkScripts: Talk[];
+    talkScripts: FieldTalk[];
   }
 >;

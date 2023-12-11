@@ -6,18 +6,16 @@ import {
   FIELD_ALL_TILE_COUNT,
   FIELD_SIZE,
   FIELD_VISIBLE_TILE_COUNT,
-  TALK_MAPS,
-} from "../datas/sample";
+} from "config";
 import { FieldScreen } from "@/features/adventure/components/FieldScreen";
 import { usePokemonEncounterAction } from "@/features/adventure/hooks/usePokemonEncounterAction";
 import { FC, useState } from "react";
 import { FieldMode } from "@/features/adventure/types";
 import {
-  FieldBase,
   FieldDirection,
-  FieldObject,
+  FieldObjectMap,
   FieldPosition,
-  ShortFieldPosition,
+  FieldTalkMap,
 } from "@types";
 import { useTalkAction } from "@/features/adventure/hooks/useTalkAction";
 import { useControllerActionHistories } from "@/features/adventure/hooks/useActionHistories";
@@ -30,19 +28,15 @@ type Props = {
   field: string;
   initialDirection: FieldDirection;
   initialPosition: FieldPosition;
-  fieldObjectMap: Record<
-    ShortFieldPosition,
-    {
-      base: FieldBase;
-      objects?: FieldObject[];
-    }
-  >;
+  fieldObjectMap: FieldObjectMap;
+  fieldTalkMap: FieldTalkMap;
 };
 export const Field: FC<Props> = ({
   field,
   initialDirection,
   initialPosition,
   fieldObjectMap,
+  fieldTalkMap,
 }) => {
   const [fieldMode, setFieldMode] = useState<FieldMode>("walk");
   const [fieldDirection, setFieldDirection] =
@@ -73,7 +67,7 @@ export const Field: FC<Props> = ({
       fieldMode,
       latestAction,
       fieldObjectMap: fieldObjectMap,
-      talkMaps: TALK_MAPS,
+      fieldTalkMap,
       fieldDirection,
       fieldPosition,
       onChangeFieldMode,

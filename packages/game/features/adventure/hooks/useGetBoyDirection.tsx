@@ -1,4 +1,4 @@
-import { FieldDirection } from "@/features/adventure/types";
+import { FieldDirection } from "@types";
 import Image from "next/image";
 
 export const useGetBoyDirection = () => {

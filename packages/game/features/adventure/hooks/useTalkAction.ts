@@ -1,28 +1,22 @@
-import { currentLocationAtom } from "@/atoms/currentLocation";
+import { FieldMode } from "@/features/adventure/types";
 import {
-  ControllerAction,
   FieldDirection,
-  FieldMaps,
-  FieldMode,
-  FieldObjectMaps,
+  FieldObjectMap,
   FieldPosition,
-  FieldTalk,
-  FieldTalkSelect,
-  FieldTalks,
-} from "@/features/adventure/types";
-import {
-  calculateShortPosition,
-  positionToShortPosition,
-} from "@/features/adventure/utils";
-import { useCallback, useEffect, useMemo, useState } from "react";
+  Talk,
+  TalkSelect,
+  Talks,
+} from "@types";
+import { calculateShortPosition } from "@/features/adventure/utils";
+import { useCallback, useState } from "react";
 import { useWatch } from "./useWatch";
 import { ActionHistory } from "./useActionHistories";
 
 export type Options = {
   fieldMode: FieldMode;
   latestAction: ActionHistory | null;
-  fieldObjectMaps: FieldObjectMaps;
-  talkMaps: FieldTalks;
+  fieldObjectMap: FieldObjectMap;
+  talkMaps: Talks;
   fieldPosition: FieldPosition;
   fieldDirection: FieldDirection;
   onChangeFieldMode: (mode: FieldMode) => void;
@@ -35,19 +29,17 @@ export const useTalkAction = ({
   latestAction,
   fieldPosition,
   fieldDirection,
-  fieldObjectMaps,
+  fieldObjectMap,
   talkMaps,
   fieldMode,
   onChangeFieldMode,
 }: Options) => {
   const [currentTalkLabel, setCurrentTalkLabel] = useState<string | null>(null);
-  const [currentTalk, setCurrentTalk] = useState<FieldTalk | null>(null);
+  const [currentTalk, setCurrentTalk] = useState<Talk | null>(null);
   const [currentSelectionLabel, setCurrentSelectionLabel] = useState<
     string | null
   >(null);
-  const [currentSelection, setCurrentSelection] = useState<FieldTalkSelect[]>(
-    []
-  );
+  const [currentSelection, setCurrentSelection] = useState<TalkSelect[]>([]);
 
   const onTalk = useCallback(() => {
     // 会話モードの場合
@@ -144,18 +136,18 @@ export const useTalkAction = ({
       return false;
     }
     const fieldMap =
-      fieldObjectMaps[calculateShortPosition(fieldPosition, fieldDirection)];
+      fieldObjectMap[calculateShortPosition(fieldPosition, fieldDirection)];
     if (!fieldMap.objects?.some((object) => object.type === "person")) {
       return false;
     }
     return true;
-  }, [latestAction, fieldObjectMaps, fieldPosition, fieldDirection]);
+  }, [latestAction, fieldObjectMap, fieldPosition, fieldDirection]);
 
   /**
    * 会話開始
    */
   const onStartTalk = useCallback(() => {
-    const fieldMap = fieldObjectMaps[
+    const fieldMap = fieldObjectMap[
       calculateShortPosition(fieldPosition, fieldDirection)
     ].objects?.find((object) => object.type === "person");
     if (!fieldMap) {
@@ -177,7 +169,7 @@ export const useTalkAction = ({
   }, [
     fieldDirection,
     fieldPosition,
-    fieldObjectMaps,
+    fieldObjectMap,
     talkMaps,
     onChangeFieldMode,
   ]);

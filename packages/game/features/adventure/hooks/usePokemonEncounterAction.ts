@@ -1,11 +1,6 @@
 import { currentLocationAtom } from "@/atoms/currentLocation";
-import {
-  ControllerAction,
-  FieldDirection,
-  FieldMode,
-  FieldObjectMaps,
-  FieldPosition,
-} from "@/features/adventure/types";
+import { FieldMode } from "@/features/adventure/types";
+import { FieldDirection, FieldObjectMap, FieldPosition } from "@types";
 import { positionToShortPosition } from "@/features/adventure/utils";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
@@ -15,7 +10,7 @@ import { useWatch } from "./useWatch";
 
 export type Options = {
   latestAction: ActionHistory | null;
-  fieldObjectMaps: FieldObjectMaps;
+  fieldObjectMap: FieldObjectMap;
   fieldMode: FieldMode;
   fieldPosition: FieldPosition;
   fieldDirection: FieldDirection;
@@ -27,7 +22,7 @@ export type Options = {
  */
 export const usePokemonEncounterAction = ({
   latestAction,
-  fieldObjectMaps,
+  fieldObjectMap,
   fieldMode,
   fieldPosition,
   fieldDirection,
@@ -55,12 +50,10 @@ export const usePokemonEncounterAction = ({
    * 草むらかどうか判定
    */
   const isObjectGrass = useCallback(() => {
-    return fieldObjectMaps[
-      positionToShortPosition(fieldPosition)
-    ].objects?.some(
+    return fieldObjectMap[positionToShortPosition(fieldPosition)].objects?.some(
       (object) => object.type === "ornament" && object.ornamentType === "grass"
     );
-  }, [fieldObjectMaps, fieldPosition]);
+  }, [fieldObjectMap, fieldPosition]);
 
   const canEncounter = useMemo(() => {
     if (!isActionWork()) {
@@ -86,7 +79,13 @@ export const usePokemonEncounterAction = ({
       direction: fieldDirection,
     });
     router.push("/samples/battle");
-  }, [saveStateCurrentLocation, fieldPosition, fieldDirection, router]);
+  }, [
+    saveStateCurrentLocation,
+    currentField,
+    fieldPosition,
+    fieldDirection,
+    router,
+  ]);
 
   useWatch(latestAction, () => {
     if (!canEncounter || !calculateIsEncounter()) {

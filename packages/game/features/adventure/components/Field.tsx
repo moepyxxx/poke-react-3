@@ -11,14 +11,14 @@ import {
 import { FieldScreen } from "@/features/adventure/components/FieldScreen";
 import { usePokemonEncounterAction } from "@/features/adventure/hooks/usePokemonEncounterAction";
 import { FC, useState } from "react";
+import { FieldMode } from "@/features/adventure/types";
 import {
   FieldBase,
   FieldDirection,
-  FieldMode,
   FieldObject,
   FieldPosition,
   ShortFieldPosition,
-} from "@/features/adventure/types";
+} from "@types";
 import { useTalkAction } from "@/features/adventure/hooks/useTalkAction";
 import { useControllerActionHistories } from "@/features/adventure/hooks/useActionHistories";
 import { useWalkAction } from "@/features/adventure/hooks/useWalkAction";
@@ -72,7 +72,7 @@ export const Field: FC<Props> = ({
     useTalkAction({
       fieldMode,
       latestAction,
-      fieldObjectMaps: fieldObjectMap,
+      fieldObjectMap: fieldObjectMap,
       talkMaps: TALK_MAPS,
       fieldDirection,
       fieldPosition,
@@ -84,14 +84,14 @@ export const Field: FC<Props> = ({
     latestAction,
     fieldPosition,
     fieldDirection,
-    fieldObjectMaps: fieldObjectMap,
+    fieldObjectMap: fieldObjectMap,
     onChangeFieldDirection,
     onChangeFieldPosition,
   });
 
   usePokemonEncounterAction({
     latestAction,
-    fieldObjectMaps: fieldObjectMap,
+    fieldObjectMap: fieldObjectMap,
     fieldMode,
     fieldPosition,
     fieldDirection,

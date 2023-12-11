@@ -1,13 +1,12 @@
 "use client";
 
+import { FieldMode } from "@/features/adventure/types";
 import {
   FieldDirection,
-  FieldMaps,
-  FieldMode,
   FieldObject,
-  FieldObjectMaps,
+  FieldObjectMap,
   FieldPosition,
-} from "@/features/adventure/types";
+} from "@types";
 import { calculateShortPosition } from "@/features/adventure/utils";
 import { useCallback } from "react";
 import { useWatch } from "./useWatch";
@@ -18,7 +17,7 @@ export type Options = {
   fieldPosition: FieldPosition;
   latestAction: ActionHistory | null;
   fieldMode: FieldMode;
-  fieldObjectMaps: FieldObjectMaps;
+  fieldObjectMap: FieldObjectMap;
   onChangeFieldDirection: (direction: FieldDirection) => void;
   onChangeFieldPosition: (position: FieldPosition) => void;
 };
@@ -30,7 +29,7 @@ export const useWalkAction = ({
   fieldDirection,
   fieldPosition,
   fieldMode,
-  fieldObjectMaps,
+  fieldObjectMap,
   latestAction,
   onChangeFieldDirection,
   onChangeFieldPosition,
@@ -61,7 +60,7 @@ export const useWalkAction = ({
 
       // 進める場合は1マス進む
       const fieldMap =
-        fieldObjectMaps[calculateShortPosition(fieldPosition, fieldDirection)];
+        fieldObjectMap[calculateShortPosition(fieldPosition, fieldDirection)];
       if (
         fieldMap.base !== "black" &&
         (!fieldMap.objects || isPassable(fieldMap.objects))
@@ -74,7 +73,7 @@ export const useWalkAction = ({
       fieldDirection,
       onChangeFieldDirection,
       onChangeFieldPosition,
-      fieldObjectMaps,
+      fieldObjectMap,
       fieldMode,
       fieldPosition,
       isPassable,

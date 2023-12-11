@@ -4,7 +4,7 @@ import {
   FieldObject,
   FieldPosition,
   ShortFieldPosition,
-} from "@/features/adventure/types";
+} from "@types";
 import { FC } from "react";
 import { motion } from "framer-motion";
 import { useGetFieldBase } from "@/features/adventure/hooks/useGetFieldBase";

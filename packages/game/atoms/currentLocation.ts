@@ -1,4 +1,4 @@
-import { FieldDirection, FieldPosition } from "@/features/adventure/types";
+import { FieldDirection, FieldPosition } from "@types";
 import { atom } from "jotai";
 
 type CurrentLocation = {

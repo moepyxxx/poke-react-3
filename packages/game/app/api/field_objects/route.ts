@@ -1,6 +1,11 @@
-// import { SampleFields } from "@masters";
+import { getFieldObjectsByFieldName } from "@masters";
 
-import { SampleFields } from "@masters";
-export function GET() {
-  return Response.json(SampleFields);
+export function GET(request: Request) {
+  const params = new URLSearchParams(request.url.split("?")[1]);
+  const fieldParam = params.get("field");
+  if (!fieldParam) {
+    return new Response("No field parameter provided", { status: 400 });
+  }
+
+  return Response.json(getFieldObjectsByFieldName(fieldParam));
 }

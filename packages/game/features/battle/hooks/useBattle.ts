@@ -209,7 +209,7 @@ export const useBattle = ({
       ];
     });
 
-    router.push(`/samples/fields/${currentLocation?.field}`);
+    router.push(`/fields/${currentLocation?.field}`);
   };
 
   const isLineNotStarted = useMemo(() => {

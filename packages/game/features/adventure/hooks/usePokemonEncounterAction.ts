@@ -78,7 +78,7 @@ export const usePokemonEncounterAction = ({
       position: fieldPosition,
       direction: fieldDirection,
     });
-    router.push("/samples/battle");
+    router.push("/battle");
   }, [
     saveStateCurrentLocation,
     currentField,

@@ -8,6 +8,7 @@ import {
   useDroppable,
   pointerWithin,
 } from "@dnd-kit/core";
+import { startsWith } from "lodash-es";
 
 type Props = {
   fieldObjectMap: FieldObjectMap;
@@ -36,21 +37,24 @@ export const EditFieldMap: FC<Props> = () => {
       }}
       onDragEnd={(event) => {
         const { over, active } = event;
-        console.log(over);
+        console.log(event);
         if (over == null || active.data.current == null) {
           return;
         }
-        console.log(
-          active.data.current.field,
-          "is over [ droppable field data ]"
-        );
+        console.log(active);
         console.log(over.id, "is over [ graggable id ]");
-        setFieldObjectMap({
-          ...fieldObjectMap,
-          [over.id]: {
-            base: active.data.current.field,
-          },
-        });
+
+        const value = active.data.current.key;
+        if (startsWith(value, "base_")) {
+          const baseValue = value.replace("base_", "");
+          setFieldObjectMap({
+            ...fieldObjectMap,
+            [over.id]: {
+              base: baseValue,
+            },
+          });
+          return;
+        }
       }}>
       <div className="border-black border-2 p-2">
         <div className="flex">
@@ -63,9 +67,9 @@ export const EditFieldMap: FC<Props> = () => {
         <p className="ml-3 mt-2">Base</p>
         <div className="flex">
           {fields.map((field, index) => (
-            <BaseDraggable id={field} key={`draggable_${index}`}>
+            <Draggable id={field} key={`draggable_${index}`} dataKey="base">
               {field}
-            </BaseDraggable>
+            </Draggable>
           ))}
         </div>
       </div>
@@ -73,15 +77,16 @@ export const EditFieldMap: FC<Props> = () => {
   );
 };
 
-type BaseDraggableProps = {
+type DraggableProps = {
   children: React.ReactNode;
   id: string;
+  dataKey: string;
 };
-const BaseDraggable: React.FC<BaseDraggableProps> = ({ children, id }) => {
+const Draggable: React.FC<DraggableProps> = ({ children, id, dataKey }) => {
   const { setNodeRef, listeners, attributes, transform } = useDraggable({
-    id: id,
+    id,
     data: {
-      field: id,
+      key: `${dataKey}_${id}`,
     },
   });
 

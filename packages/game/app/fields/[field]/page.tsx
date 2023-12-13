@@ -1,6 +1,6 @@
 import { FieldView } from "@/features/adventure/views";
 
-export default async function SampleFieldPage({
+export default async function FieldPage({
   params,
 }: {
   params: { field: string };

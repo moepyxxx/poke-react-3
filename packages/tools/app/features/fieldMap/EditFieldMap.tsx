@@ -9,25 +9,32 @@ import {
   pointerWithin,
 } from "@dnd-kit/core";
 import { startsWith } from "lodash-es";
+import { FIELD_ALL_TILE_COUNT } from "@constants";
+
+function createFieldObjectMapKey(): ShortFieldPosition[][] {
+  const keys: ShortFieldPosition[][] = [];
+  for (let i = 1; i <= FIELD_ALL_TILE_COUNT; i++) {
+    const childKeys: ShortFieldPosition[] = [];
+    for (let j = 1; j <= FIELD_ALL_TILE_COUNT; j++) {
+      childKeys.push(`${j}-${i}` as ShortFieldPosition);
+    }
+    keys.push(childKeys);
+  }
+  return keys;
+}
 
 type Props = {
-  fieldObjectMap: FieldObjectMap;
+  initialFieldObjectMap: FieldObjectMap;
 };
-export const EditFieldMap: FC<Props> = () => {
+export const EditFieldMap: FC<Props> = ({ initialFieldObjectMap }) => {
   const fields = ["black", "load", "grass"];
-  const maps: ShortFieldPosition[] = ["1-1", "1-2", "1-3"];
+  const ornamentObjects = ["tree", "fence"];
+  const mapKeys: ShortFieldPosition[][] = createFieldObjectMapKey();
+  console.log(mapKeys);
 
-  const [fieldObjectMap, setFieldObjectMap] = React.useState<FieldObjectMap>({
-    "1-1": {
-      base: "black",
-    },
-    "1-2": {
-      base: "black",
-    },
-    "1-3": {
-      base: "black",
-    },
-  });
+  const [fieldObjectMap, setFieldObjectMap] = React.useState<FieldObjectMap>(
+    initialFieldObjectMap
+  );
 
   return (
     <DndContext
@@ -55,19 +62,44 @@ export const EditFieldMap: FC<Props> = () => {
           });
           return;
         }
+        if (startsWith(value, "objectOrnament_")) {
+          const baseValue = value.replace("objectOrnament_", "");
+          setFieldObjectMap({
+            ...fieldObjectMap,
+            [over.id]: {
+              base: baseValue,
+            },
+          });
+          return;
+        }
       }}>
       <div className="border-black border-2 p-2">
         <div className="flex">
-          {maps.map((map, index) => (
-            <Droppable key={`droppable_${index}`} id={map}>
-              {fieldObjectMap[map].base}
-            </Droppable>
+          {mapKeys.map((childMapKeys, index) => (
+            <div key={`m_${index}`}>
+              {childMapKeys.map((mapKey, index) => (
+                <Droppable key={`m_child_${index}`} id={mapKey}>
+                  {fieldObjectMap[mapKey].base}
+                </Droppable>
+              ))}
+            </div>
           ))}
         </div>
         <p className="ml-3 mt-2">Base</p>
         <div className="flex">
           {fields.map((field, index) => (
             <Draggable id={field} key={`draggable_${index}`} dataKey="base">
+              {field}
+            </Draggable>
+          ))}
+        </div>
+        <p className="ml-3 mt-2">Object Ornament</p>
+        <div className="flex">
+          {ornamentObjects.map((field, index) => (
+            <Draggable
+              id={field}
+              key={`draggable_${index}`}
+              dataKey="objectOrnament">
               {field}
             </Draggable>
           ))}
@@ -103,7 +135,7 @@ const Draggable: React.FC<DraggableProps> = ({ children, id, dataKey }) => {
         transform: transformStyle,
         height: "fit-content",
       }}
-      className="w-16 h-16 border-black border-2 m-3 p-2 cursor-pointer">
+      className="w-16 h-16 border-black border-2 m-3 p-2 cursor-pointer bg-neutral-200">
       {children}
     </div>
   );
@@ -121,11 +153,9 @@ export const Droppable: FC<DroppableProps> = ({ id, children }) => {
   return (
     <div
       ref={setNodeRef}
-      className="w-40 h-40 border-black border-2 m-3 p-2 cursor-pointer">
-      {id}
-      <br />
-      {isOver ? "over" : "not over"}
-      <br />
+      className={`w-10 h-10 border-black border-2 m-1 cursor-pointer text-xs ${
+        isOver ? "bg-slate-400	" : ""
+      }`}>
       {children}
     </div>
   );

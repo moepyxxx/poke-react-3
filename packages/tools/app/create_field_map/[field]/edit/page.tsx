@@ -12,5 +12,5 @@ export default async function CreateFieldMapEdit({
 
   const fieldObjectMap = fieldObjectMaps[params.field];
 
-  return <EditFieldMap fieldObjectMap={fieldObjectMap} />;
+  return <EditFieldMap initialFieldObjectMap={fieldObjectMap} />;
 }

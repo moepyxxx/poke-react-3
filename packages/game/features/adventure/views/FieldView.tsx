@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { Field } from "../components/Field";
 import { currentLocationAtom } from "@/atoms/currentLocation";
-import { FIELD_MIDDLE_POSITION } from "config";
+import { FIELD_MIDDLE_POSITION } from "@constants";
 import { FC } from "react";
 import { FieldObjectMap, FieldTalkMap } from "@types";
 

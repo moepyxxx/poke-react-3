@@ -6,7 +6,7 @@ import {
   FIELD_ALL_TILE_COUNT,
   FIELD_SIZE,
   FIELD_VISIBLE_TILE_COUNT,
-} from "config";
+} from "@constants";
 import { FieldScreen } from "@/features/adventure/components/FieldScreen";
 import { usePokemonEncounterAction } from "@/features/adventure/hooks/usePokemonEncounterAction";
 import { FC, useState } from "react";

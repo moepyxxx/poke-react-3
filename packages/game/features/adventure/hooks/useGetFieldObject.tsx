@@ -1,5 +1,4 @@
 import { FieldMaterial } from "@types";
-import Image from "next/image";
 
 export const useGetFieldObject = () => {
   return function useGetFieldObject(
@@ -9,23 +8,31 @@ export const useGetFieldObject = () => {
     switch (object.type) {
       case "person":
         return (
-          <Image
-            priority
-            src={`/person/object/${object.personType}.svg`}
-            height={24}
-            width={24}
-            alt="Follow us on Twitter"
-          />
+          <picture>
+            <img
+              src={
+                require(`@masters/images/person/${object.personType}.svg`)
+                  .default
+              }
+              width={24}
+              height={24}
+              alt="アイコン"
+            />
+          </picture>
         );
       case "ornament":
         return (
-          <Image
-            priority
-            src={`/ornament/${object.ornamentType}.svg`}
-            height={24}
-            width={24}
-            alt="Follow us on Twitter"
-          />
+          <picture>
+            <img
+              src={
+                require(`@masters/images/ornament/${object.ornamentType}.svg`)
+                  .default
+              }
+              width={24}
+              height={24}
+              alt="アイコン"
+            />
+          </picture>
         );
       default:
         return <></>;

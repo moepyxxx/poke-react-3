@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "file-loader": "^6.2.0",
     "framer-motion": "^10.16.4",
     "jotai": "^2.5.1",
     "lodash": "^4.17.21",
@@ -17,6 +18,7 @@
     "react-dom": "^18",
     "react-transition-group": "^4.4.5",
     "tailwind-variants": "^0.1.18",
+    "url-loader": "^4.1.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

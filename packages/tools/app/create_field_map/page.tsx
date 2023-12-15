@@ -6,7 +6,7 @@ const cell = tv({
   base: "border border-slate-700 px-4 py-2",
 });
 
-const link = tv({
+export const link = tv({
   base: "hover:text-blue-700 underline",
 });
 

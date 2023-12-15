@@ -11,10 +11,6 @@ const nextConfig = {
       },
     ],
   },
-  // webpack: (config) => {
-  //   config.resolve.alias["@masters"] = path.resolve(__dirname, "../masters");
-  //   return config;
-  // },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(png|jpg|gif|svg)$/,

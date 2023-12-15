@@ -12,5 +12,13 @@ export default async function CreateFieldMapEdit({
 
   const fieldObjectMap = fieldObjectMaps[params.field];
 
-  return <EditFieldMap initialFieldObjectMap={fieldObjectMap} />;
+  return (
+    <>
+      <h1 className="mb-4">フィールド編集（{params.field}）</h1>
+      <EditFieldMap
+        field={params.field}
+        initialFieldObjectMap={fieldObjectMap}
+      />
+    </>
+  );
 }

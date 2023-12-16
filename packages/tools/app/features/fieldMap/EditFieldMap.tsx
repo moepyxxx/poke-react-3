@@ -64,6 +64,13 @@ export const EditFieldMap: FC<Props> = ({ initialFieldObjectMap, field }) => {
 
         if (startsWith(value, "base_")) {
           const baseValue = value.replace("base_", "");
+          console.log({
+            ...fieldObjectMap,
+            [over.id]: {
+              ...currentObjects,
+              base: baseValue,
+            },
+          });
           setFieldObjectMap({
             ...fieldObjectMap,
             [over.id]: {
@@ -82,7 +89,7 @@ export const EditFieldMap: FC<Props> = ({ initialFieldObjectMap, field }) => {
               objects: [
                 {
                   type: "ornament",
-                  ornament: ornamentValue,
+                  ornamentType: ornamentValue,
                 },
               ],
             },

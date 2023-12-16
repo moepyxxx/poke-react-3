@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="ja">
       <body
         className={`${dot.className} max-w-md mx-auto my-10 bg-neutral-200`}>
-        <div>{children}</div>
+        {children}
       </body>
     </html>
   );

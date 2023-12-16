@@ -19,7 +19,7 @@ import { startsWith } from "lodash-es";
 import { FIELD_ALL_TILE_COUNT } from "@constants";
 import NextLink from "next/link";
 import { link } from "@/app/create_field_map/page";
-import { revalidateTag } from "next/cache";
+import { useRouter } from "next/navigation";
 
 function createFieldObjectMapKey(): ShortFieldPosition[][] {
   const keys: ShortFieldPosition[][] = [];
@@ -41,6 +41,7 @@ export const EditFieldMap: FC<Props> = ({
   initialFieldObjectMap,
   fieldKey,
 }) => {
+  const router = useRouter();
   const fields: FieldBase[] = ["black", "grass-load", "grass"];
   const ornamentObjects: FieldOrnamentType[] = ["tree", "grass"];
   const mapKeys: ShortFieldPosition[][] = createFieldObjectMapKey();
@@ -58,7 +59,7 @@ export const EditFieldMap: FC<Props> = ({
         fieldObjectMap,
       }),
     });
-    revalidateTag("field_objects");
+    router.push(`/create_field_map`);
   };
 
   return (
@@ -81,13 +82,6 @@ export const EditFieldMap: FC<Props> = ({
 
         if (startsWith(value, "base_")) {
           const baseValue = value.replace("base_", "");
-          console.log({
-            ...fieldObjectMap,
-            [over.id]: {
-              ...currentObjects,
-              base: baseValue,
-            },
-          });
           setFieldObjectMap({
             ...fieldObjectMap,
             [over.id]: {
@@ -164,14 +158,14 @@ export const EditFieldMap: FC<Props> = ({
             <>
               <p>本当に良い？</p>
               <button
-                className="bg-neutral-400 p-3 text-white rounded"
+                className="bg-neutral-400 p-2 text-white rounded m-1"
                 onClick={() => {
                   setConfirmEdit(false);
                 }}>
                 Cancel
               </button>
               <button
-                className="bg-neutral-400 p-3 text-white rounded"
+                className="bg-neutral-400 p-2 text-white rounded m-1"
                 onClick={() => {
                   onEdit();
                   setConfirmEdit(false);

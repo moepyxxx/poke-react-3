@@ -19,13 +19,25 @@
       "base": "black"
     },
     "2-2": {
-      "base": "grass"
+      "base": "grass",
+      "objects": [
+        {
+          "type": "ornament",
+          "ornamentType": "grass"
+        }
+      ]
     },
     "3-2": {
       "base": "grass-load"
     },
     "4-2": {
-      "base": "grass-load"
+      "base": "grass",
+      "objects": [
+        {
+          "type": "ornament",
+          "ornamentType": "grass"
+        }
+      ]
     },
     "5-2": {
       "base": "black"
@@ -38,16 +50,16 @@
       "objects": [
         {
           "type": "ornament",
-          "ornamentType": "tree"
+          "ornamentType": "grass"
         }
       ]
     },
     "3-3": {
-      "base": "grass-load",
+      "base": "grass",
       "objects": [
         {
           "type": "ornament",
-          "ornamentType": "tree"
+          "ornamentType": "grass"
         }
       ]
     },
@@ -56,7 +68,7 @@
       "objects": [
         {
           "type": "ornament",
-          "ornamentType": "tree"
+          "ornamentType": "grass"
         }
       ]
     },
@@ -89,7 +101,7 @@
       "objects": [
         {
           "type": "ornament",
-          "ornamentType": "tree"
+          "ornamentType": "grass"
         }
       ]
     },

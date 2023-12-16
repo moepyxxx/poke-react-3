@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   FieldBase,
   FieldObject,
@@ -14,10 +14,12 @@ import {
   useDroppable,
   pointerWithin,
 } from "@dnd-kit/core";
+
 import { startsWith } from "lodash-es";
 import { FIELD_ALL_TILE_COUNT } from "@constants";
 import NextLink from "next/link";
 import { link } from "@/app/create_field_map/page";
+import { revalidateTag } from "next/cache";
 
 function createFieldObjectMapKey(): ShortFieldPosition[][] {
   const keys: ShortFieldPosition[][] = [];
@@ -33,16 +35,31 @@ function createFieldObjectMapKey(): ShortFieldPosition[][] {
 
 type Props = {
   initialFieldObjectMap: FieldObjectMap;
-  field: string;
+  fieldKey: string;
 };
-export const EditFieldMap: FC<Props> = ({ initialFieldObjectMap, field }) => {
+export const EditFieldMap: FC<Props> = ({
+  initialFieldObjectMap,
+  fieldKey,
+}) => {
   const fields: FieldBase[] = ["black", "grass-load", "grass"];
   const ornamentObjects: FieldOrnamentType[] = ["tree", "grass"];
   const mapKeys: ShortFieldPosition[][] = createFieldObjectMapKey();
 
-  const [fieldObjectMap, setFieldObjectMap] = React.useState<FieldObjectMap>(
+  const [fieldObjectMap, setFieldObjectMap] = useState<FieldObjectMap>(
     initialFieldObjectMap
   );
+  const [confirmEdit, setConfirmEdit] = useState<boolean>(false);
+
+  const onEdit = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field_objects`, {
+      method: "POST",
+      body: JSON.stringify({
+        fieldKey,
+        fieldObjectMap,
+      }),
+    });
+    revalidateTag("field_objects");
+  };
 
   return (
     <DndContext
@@ -101,11 +118,11 @@ export const EditFieldMap: FC<Props> = ({ initialFieldObjectMap, field }) => {
         <div>
           <div className="flex gap-4 items-start">
             <div className="flex">
-              {mapKeys.map((childMapKeys, index) => (
-                <div key={`m_${index}`}>
+              {mapKeys.map((childMapKeys, childIndex) => (
+                <div key={`m_${childIndex}`}>
                   {childMapKeys.map((mapKey, index) => (
                     <Droppable
-                      key={`m_child_${index}`}
+                      key={`m_child_${childIndex}_${index}`}
                       id={mapKey}
                       fieldParts={fieldObjectMap[mapKey]}
                     />
@@ -143,12 +160,35 @@ export const EditFieldMap: FC<Props> = ({ initialFieldObjectMap, field }) => {
           </div>
         </div>
         <div className="text-center mt-4">
-          <button className="bg-neutral-400 p-3 text-white rounded">
-            Map編集完了!
-          </button>
+          {confirmEdit ? (
+            <>
+              <p>本当に良い？</p>
+              <button
+                className="bg-neutral-400 p-3 text-white rounded"
+                onClick={() => {
+                  setConfirmEdit(false);
+                }}>
+                Cancel
+              </button>
+              <button
+                className="bg-neutral-400 p-3 text-white rounded"
+                onClick={() => {
+                  onEdit();
+                  setConfirmEdit(false);
+                }}>
+                OK
+              </button>
+            </>
+          ) : (
+            <button
+              className="bg-neutral-400 p-3 text-white rounded"
+              onClick={() => setConfirmEdit(true)}>
+              Map編集完了!
+            </button>
+          )}
         </div>
         <div className="mt-4">
-          <NextLink className={link()} href={`/create_field_map/${field}`}>
+          <NextLink className={link()} href={`/create_field_map/${fieldKey}`}>
             詳細へ
           </NextLink>
           <br />
@@ -228,26 +268,30 @@ export const Droppable: FC<DroppableProps> = ({ id, fieldParts }) => {
           alt="base"
         />
       </picture>
-      {fieldParts.objects?.map((object, index) => {
-        switch (object.type) {
-          case "ornament":
-            return (
-              <picture key={`object_${index}`}>
-                <img
-                  className="absolute top-0 left-0"
-                  width={36}
-                  height={36}
-                  src={
-                    require(`@masters/images/ornament/${object.ornamentType}.svg`)
-                      .default
-                  }
-                  alt="ornament"
-                />
-              </picture>
-            );
-        }
-        return <></>;
-      })}
+      {fieldParts.objects &&
+        fieldParts.objects.length > 0 &&
+        fieldParts.objects.map((object, index) => {
+          switch (object.type) {
+            case "ornament":
+              return (
+                <picture key={`ornament_${id}_${index}`}>
+                  <img
+                    className="absolute top-0 left-0"
+                    width={36}
+                    height={36}
+                    src={
+                      require(`@masters/images/ornament/${object.ornamentType}.svg`)
+                        .default
+                    }
+                    alt="ornament"
+                  />
+                </picture>
+              );
+            default:
+              return <div key={`other_${index}`}></div>;
+          }
+        })}
     </div>
   );
 };
+export default EditFieldMap;

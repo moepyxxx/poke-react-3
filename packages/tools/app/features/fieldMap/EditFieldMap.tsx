@@ -3,23 +3,19 @@
 import React, { FC, useState } from "react";
 import {
   FieldBase,
-  FieldObject,
   FieldObjectMap,
   FieldOrnamentType,
   ShortFieldPosition,
 } from "@types";
-import {
-  DndContext,
-  useDraggable,
-  useDroppable,
-  pointerWithin,
-} from "@dnd-kit/core";
+import { DndContext, pointerWithin } from "@dnd-kit/core";
 
 import { startsWith } from "lodash-es";
 import { FIELD_ALL_TILE_COUNT } from "@constants";
 import NextLink from "next/link";
 import { link } from "@/app/create_field_map/page";
 import { useRouter } from "next/navigation";
+import { FieldMapDraggable } from "./FieldMapDraggable";
+import { FieldMapDroppable } from "./FieldMapDroppable";
 
 function createFieldObjectMapKey(): ShortFieldPosition[][] {
   const keys: ShortFieldPosition[][] = [];
@@ -70,12 +66,9 @@ export const EditFieldMap: FC<Props> = ({
       }}
       onDragEnd={(event) => {
         const { over, active } = event;
-        console.log(event);
         if (over == null || active.data.current == null) {
           return;
         }
-        console.log(active);
-        console.log(over.id, "is over [ graggable id ]");
 
         const value = active.data.current.key;
         const currentObjects = fieldObjectMap[over.id as ShortFieldPosition];
@@ -115,7 +108,7 @@ export const EditFieldMap: FC<Props> = ({
               {mapKeys.map((childMapKeys, childIndex) => (
                 <div key={`m_${childIndex}`}>
                   {childMapKeys.map((mapKey, index) => (
-                    <Droppable
+                    <FieldMapDroppable
                       key={`m_child_${childIndex}_${index}`}
                       id={mapKey}
                       fieldParts={fieldObjectMap[mapKey]}
@@ -130,23 +123,23 @@ export const EditFieldMap: FC<Props> = ({
                 <p className="ml-3 mt-2">Base</p>
                 <div className="flex">
                   {fields.map((field, index) => (
-                    <Draggable
+                    <FieldMapDraggable
                       id={field}
                       key={`draggable_${index}`}
                       dataKey="base">
                       {field}
-                    </Draggable>
+                    </FieldMapDraggable>
                   ))}
                 </div>
                 <p className="ml-3 mt-2">Object Ornament</p>
                 <div className="flex">
                   {ornamentObjects.map((object, index) => (
-                    <Draggable
+                    <FieldMapDraggable
                       id={object}
                       key={`draggable_${index}`}
                       dataKey="objectOrnament">
                       {object}
-                    </Draggable>
+                    </FieldMapDraggable>
                   ))}
                 </div>
               </div>
@@ -195,97 +188,4 @@ export const EditFieldMap: FC<Props> = ({
   );
 };
 
-type DraggableProps = {
-  children: React.ReactNode;
-  id: string;
-  dataKey: string;
-};
-const Draggable: React.FC<DraggableProps> = ({ children, id, dataKey }) => {
-  const { setNodeRef, listeners, attributes, transform } = useDraggable({
-    id: `${dataKey}_${id}`,
-    data: {
-      key: `${dataKey}_${id}`,
-    },
-  });
-
-  const transformStyle = transform
-    ? `translate(${transform.x}px, ${transform.y}px)`
-    : undefined;
-
-  const dataPath = dataKey === "base" ? "base" : "ornament";
-  return (
-    <div
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      style={{
-        transform: transformStyle,
-        height: "fit-content",
-      }}
-      className="w-10 h-10 m-3 cursor-pointer bg-neutral-200">
-      <picture>
-        <img
-          width={36}
-          height={36}
-          src={require(`@masters/images/${dataPath}/${children}.svg`).default}
-          alt="base"
-        />
-      </picture>
-    </div>
-  );
-};
-
-type DroppableProps = {
-  id: string;
-  fieldParts: {
-    base: FieldBase;
-    objects?: FieldObject[];
-  };
-};
-export const Droppable: FC<DroppableProps> = ({ id, fieldParts }) => {
-  const { setNodeRef, isOver } = useDroppable({
-    id,
-  });
-
-  return (
-    <div
-      ref={setNodeRef}
-      className={`w-10 relative h-10 m-1 cursor-pointer text-xs ${
-        isOver ? "opacity-25" : ""
-      }`}>
-      <picture>
-        <img
-          className="absolute top-0 left-0"
-          width={36}
-          height={36}
-          src={require(`@masters/images/base/${fieldParts.base}.svg`).default}
-          alt="base"
-        />
-      </picture>
-      {fieldParts.objects &&
-        fieldParts.objects.length > 0 &&
-        fieldParts.objects.map((object, index) => {
-          switch (object.type) {
-            case "ornament":
-              return (
-                <picture key={`ornament_${id}_${index}`}>
-                  <img
-                    className="absolute top-0 left-0"
-                    width={36}
-                    height={36}
-                    src={
-                      require(`@masters/images/ornament/${object.ornamentType}.svg`)
-                        .default
-                    }
-                    alt="ornament"
-                  />
-                </picture>
-              );
-            default:
-              return <div key={`other_${index}`}></div>;
-          }
-        })}
-    </div>
-  );
-};
 export default EditFieldMap;

@@ -28,7 +28,13 @@
       ]
     },
     "3-2": {
-      "base": "grass-load"
+      "base": "grass-load",
+      "objects": [
+        {
+          "type": "ornament",
+          "ornamentType": "grass"
+        }
+      ]
     },
     "4-2": {
       "base": "grass",

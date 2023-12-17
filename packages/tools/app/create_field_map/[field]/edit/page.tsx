@@ -1,3 +1,4 @@
+import { getFieldObjects } from "@/app/actions";
 import { FieldObjectMap } from "@types";
 
 // see: https://github.com/clauderic/dnd-kit/issues/926#issuecomment-1509761002
@@ -15,13 +16,8 @@ export default async function CreateFieldMapEdit({
 }: {
   params: { field: string };
 }) {
-  const fieldObjectMaps: Record<string, FieldObjectMap> = await (
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field_objects`, {
-      next: {
-        tags: ["field_objects"],
-      },
-    })
-  ).json();
+  // TODO: 一度保存以降にrevalidateTagのキャッシュが効かない。edit→topの時にはrevalidateが効いてるのに…
+  const fieldObjectMaps = await getFieldObjects();
 
   const fieldObjectMap = fieldObjectMaps[params.field];
 

@@ -1,6 +1,7 @@
 import { tv } from "tailwind-variants";
 import NextLink from "next/link";
 import { FieldObjectMap } from "@types";
+import { getFieldObjects } from "../actions";
 
 const cell = tv({
   base: "border border-slate-700 px-4 py-2",
@@ -11,11 +12,11 @@ export const link = tv({
 });
 
 export default async function CreateFieldMapList() {
-  const fieldObjectMaps: Record<string, FieldObjectMap> = await (
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/field_objects`)
-  ).json();
+  const fieldObjectMaps = await getFieldObjects();
+
   return (
     <>
+      <a href="/create_field_map/sample/edit">101</a>
       <h1 className="mb-4">フィールド一覧</h1>
       <table className="border-collapse border border-slate-700">
         <thead>

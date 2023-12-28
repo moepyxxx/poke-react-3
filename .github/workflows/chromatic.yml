@@ -14,11 +14,9 @@ jobs:
           fetch-depth: 0
 
       - name: Install dependencies
-        # ⚠️ Pick one of these, matching the package manager for your project
-        run: | 
-          npm ci
-          pnpm install
-          yarn install --immutable --immutable-cache --check-cache
+        # 以下にしたいがcacheをgit管理する必要がある。cacheファイルを指定する方法がわからないため保留
+        # run: yarn install --immutable --immutable-cache --check-cache
+        run: yarn install
 
       - name: Publish to Chromatic
         uses: chromaui/action@latest

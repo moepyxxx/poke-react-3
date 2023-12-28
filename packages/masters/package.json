@@ -4,6 +4,6 @@
   "license": "UNLICENSED",
   "main": "index.ts",
   "volta": {
-    "extends": "../package.json"
+    "extends": "../../package.json"
   }
 }

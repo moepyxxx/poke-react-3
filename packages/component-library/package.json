@@ -1,5 +1,5 @@
 {
-  "name": "components",
+  "name": "component-library",
   "version": "1.0.0",
   "license": "UNLICENSED",
   "main": "index.ts",

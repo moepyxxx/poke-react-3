@@ -27,13 +27,18 @@ type Props = {
   variant: FontVariant;
   disabled: boolean;
   children: ReactNode;
+  onClick: () => void;
 };
 
-export const Button: FC<Props> = ({ size, variant, disabled, children }) => {
+export const Button: FC<Props> = ({
+  size,
+  variant,
+  disabled,
+  children,
+  onClick,
+}) => {
   return (
-    <button
-      className={button({ size, variant, disabled })}
-      onClick={() => alert("click button!")}>
+    <button className={button({ size, variant, disabled })} onClick={onClick}>
       {children}
     </button>
   );

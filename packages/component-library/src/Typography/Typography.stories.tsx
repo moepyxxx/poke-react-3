@@ -5,12 +5,16 @@ import { Typography } from "./Typography";
 const meta: Meta<typeof Typography> = {
   component: Typography,
   title: "Typography",
-  parameters: {
-    layout: "centered",
-  },
   args: {
-    children: "テキストリンク",
+    children: "ここにテキストが入ります",
   },
+  decorators: [
+    (Story) => (
+      <div className="m-5">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;

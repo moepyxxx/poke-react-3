@@ -7,7 +7,7 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-export const InputText: FC<Props> = ({ label, name, value, onChange }) => {
+export const TextField: FC<Props> = ({ label, name, value, onChange }) => {
   return (
     <div className="min-w-64">
       <div className="mb-2">

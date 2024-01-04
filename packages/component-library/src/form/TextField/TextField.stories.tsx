@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { InputText } from "./InputText";
+import { TextField } from "./TextField";
 import { useState } from "react";
 
 const Template: Story["render"] = ({ value: _, onChange: __, ...args }) => {
   const [value, setValue] = useState("");
-  return <InputText {...args} value={value} onChange={setValue} />;
+  return <TextField {...args} value={value} onChange={setValue} />;
 };
 
-const meta: Meta<typeof InputText> = {
-  component: InputText,
-  title: "Form/InputText",
+const meta: Meta<typeof TextField> = {
+  component: TextField,
+  title: "Form/TextField",
   parameters: {
     layout: "centered",
   },
@@ -22,6 +22,6 @@ const meta: Meta<typeof InputText> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof InputText>;
+type Story = StoryObj<typeof TextField>;
 
 export const Base: Story = {};

@@ -11,17 +11,22 @@ const meta: Meta<typeof Button> = {
   args: {
     children: "ボタン",
     size: "medium",
-    variant: "primary",
-    isDisabled: false,
+    variant: "fill",
+    disabled: false,
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-export const Primary: Story = {};
-export const Secondary: Story = {
+export const Fill: Story = {};
+export const Outline: Story = {
   args: {
-    variant: "secondary",
+    variant: "outline",
+  },
+};
+export const Disabled: Story = {
+  args: {
+    disabled: true,
   },
 };

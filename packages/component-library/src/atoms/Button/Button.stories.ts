@@ -4,7 +4,7 @@ import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "Button",
+  title: "Atoms/Button",
   parameters: {
     layout: "centered",
   },

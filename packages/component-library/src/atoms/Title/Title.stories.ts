@@ -4,7 +4,7 @@ import { Title } from "./Title";
 
 const meta: Meta<typeof Title> = {
   component: Title,
-  title: "Title",
+  title: "Atoms/Title",
   parameters: {
     layout: "centered",
   },

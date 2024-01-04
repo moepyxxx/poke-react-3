@@ -4,7 +4,7 @@ import { TextLink } from "./TextLink";
 
 const meta: Meta<typeof TextLink> = {
   component: TextLink,
-  title: "TextLink",
+  title: "Atoms/TextLink",
   parameters: {
     layout: "centered",
   },

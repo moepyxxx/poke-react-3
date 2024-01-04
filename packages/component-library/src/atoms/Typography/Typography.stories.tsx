@@ -4,7 +4,7 @@ import { Typography } from "./Typography";
 
 const meta: Meta<typeof Typography> = {
   component: Typography,
-  title: "Typography",
+  title: "Atoms/Typography",
   args: {
     children: "ここにテキストが入ります",
   },

@@ -10,7 +10,7 @@ const Template: Story["render"] = ({ value: _, onChange: __, ...args }) => {
 
 const meta: Meta<typeof TextField> = {
   component: TextField,
-  title: "Form/TextField",
+  title: "Forms/TextField",
   parameters: {
     layout: "centered",
   },

@@ -5768,9 +5768,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"components@workspace:packages/componentLibrary":
+"component-library@workspace:packages/component-library":
   version: 0.0.0-use.local
-  resolution: "components@workspace:packages/componentLibrary"
+  resolution: "component-library@workspace:packages/component-library"
   dependencies:
     "@storybook/addon-essentials": "npm:^7.6.6"
     "@storybook/addon-interactions": "npm:^7.6.6"

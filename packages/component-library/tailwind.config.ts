@@ -6,9 +6,9 @@ const config: Config = {
     colors: {
       primary: "#1AA7B0",
       black: "#1A1A1C",
-      deepGray: "#4E4E4E",
+      "deep-gray": "#4E4E4E",
       gray: "#CCCCCC",
-      thinGray: "#E6E6E6",
+      "thin-gray": "#E6E6E6",
       white: "#FFFFFF",
     },
     fontFamily: {
